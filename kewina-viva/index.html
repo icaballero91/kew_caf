@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kewiña Viva · Presentación para CAF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --olive0:#1b211d; --olive1:#262d28;
+  --moss:#9cbf73; --leaf:#c3d99d; --gold:#e0bc68; --water:#8fc4d6; --bark:#d08b57;
+  --card:#e9ebe5; --cardInk:#1d241f; --cardInk2:rgba(29,36,31,.7);
+  --ink:#f1f2ec; --ink2:rgba(241,242,236,.78); --ink3:rgba(241,242,236,.52); --line:rgba(241,242,236,.15);
+  --disp:"Urbanist","DM Sans",system-ui,sans-serif; --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --terra:var(--gold); --sienna:var(--leaf); --ochre:var(--gold); --sage:var(--moss); --lake:var(--water); --stone:#b8b2a2; --deep:#1b211d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--olive0);color:var(--ink);font-family:var(--sans);font-size:16px;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+
+/* ---------- fondo ---------- */
+.scene{position:absolute;inset:0;visibility:hidden;overflow:hidden;background:radial-gradient(70% 70% at 0% 0%,#3a4637 0%,transparent 70%),radial-gradient(60% 60% at 100% 100%,#2b3529 0%,transparent 70%),linear-gradient(160deg,#2a312b 0%,#1e2420 60%,#161a17 100%)}
+.scene.on{visibility:visible}
+.scene.dark{background:radial-gradient(60% 70% at 50% 40%,#26302a 0%,#141915 70%,#0e120f 100%)}
+.bgp{position:absolute;inset:-3%;background-size:cover;background-position:center;opacity:.5;filter:saturate(.95) brightness(.8);z-index:0;will-change:transform}
+.scene::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(24,29,25,.9) 0%,rgba(24,29,25,.7) 45%,rgba(24,29,25,.5) 100%),linear-gradient(0deg,rgba(18,22,19,.7) 0%,transparent 40%)}
+.scene.dark::before{background:none}
+.scene::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,transparent calc(25% - .5px),rgba(255,255,255,.06) 25%,transparent calc(25% + .5px)),linear-gradient(90deg,transparent calc(50% - .5px),rgba(255,255,255,.06) 50%,transparent calc(50% + .5px)),linear-gradient(90deg,transparent calc(75% - .5px),rgba(255,255,255,.06) 75%,transparent calc(75% + .5px))}
+.giant{position:absolute;left:-1vw;bottom:-5vw;z-index:2;font-family:var(--disp);font-weight:700;font-size:21vw;line-height:1;color:rgba(255,255,255,.04);letter-spacing:-.02em;pointer-events:none;white-space:nowrap}
+
+/* ---------- barra superior: marca, hilo conductor, índice ---------- */
+.top{position:fixed;top:0;left:0;right:0;z-index:35;display:flex;align-items:center;gap:20px;padding:16px clamp(18px,3vw,44px);background:linear-gradient(180deg,rgba(20,25,21,.85),rgba(20,25,21,0));pointer-events:none}
+.top>*{pointer-events:auto}
+.word{font-family:var(--disp);font-size:19px;font-weight:700;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.word svg{width:24px;height:24px}
+.thread{flex:1;display:flex;justify-content:center;gap:6px}
+.thread button{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:500;color:var(--ink3);border:1px solid transparent;transition:all .3s}
+.thread button i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;border:1px solid currentColor}
+.thread button.done{color:var(--ink2)}
+.thread button.now{color:#1d241f;background:#fff}
+.thread button.now i{background:var(--moss);border-color:var(--moss)}
+.thread button.core.now{background:var(--gold)}
+.thread .sub{display:none;font-weight:700}
+.thread button.now .sub{display:inline}
+.tools{display:flex;gap:18px;align-items:center;position:relative}
+.tlink{padding:6px 0;color:var(--ink2);font-weight:500;font-size:13.5px;display:flex;align-items:center;gap:6px}
+.tlink:hover{color:var(--ink)}
+.tlink svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .25s}
+.tlink[aria-expanded="true"] svg{transform:rotate(180deg)}
+.dd{position:absolute;top:calc(100% + 10px);right:0;width:330px;max-height:calc(100vh - 90px);overflow:auto;background:rgba(27,33,29,.97);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:10px;box-shadow:0 24px 60px rgba(0,0,0,.5);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .2s,transform .2s}
+.dd.open{opacity:1;pointer-events:auto;transform:none}
+.dd h5{font-size:11px;font-weight:700;color:var(--moss);padding:10px 10px 4px;letter-spacing:.02em}
+.dd button{display:flex;gap:10px;width:100%;padding:7px 10px;border-radius:10px;font-size:14px;color:var(--ink2);opacity:0;transform:translateY(-4px);transition:opacity .25s,transform .25s,background .2s}
+.dd.open button{opacity:1;transform:none}
+.dd button span{color:var(--ink3);font-size:12px;width:20px;font-variant-numeric:tabular-nums}
+.dd button:hover,.dd button[aria-current="true"]{background:rgba(255,255,255,.08);color:var(--ink)}
+.chrome{position:fixed;z-index:30;display:flex;align-items:center;gap:10px}
+.chrome.bl{display:none}
+.chrome.bl b{font-family:var(--disp);font-size:19px;color:var(--moss)}
+.chrome.br{bottom:14px;right:clamp(18px,3vw,44px)}
+.arrow{width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;background:rgba(20,25,21,.5);transition:background .2s,color .2s}
+.arrow:hover{background:#fff;color:var(--olive0)}
+.arrow svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+.ticks{position:fixed;z-index:30;left:50%;bottom:30px;transform:translateX(-50%);display:flex;gap:5px}
+.ticks button{width:20px;height:14px;display:grid;place-items:center}
+.ticks button i{display:block;width:100%;height:2px;background:rgba(255,255,255,.22)}
+.ticks button[aria-current="true"] i{background:var(--moss);height:3px}
+
+/* ---------- base ---------- */
+.deck{position:fixed;inset:0;z-index:2}
+.inner{position:relative;z-index:3;height:100%;overflow-y:auto;overflow-x:hidden;padding:84px clamp(20px,3.4vw,58px) 78px;display:flex;flex-direction:column;justify-content:flex-start;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+.inner>*{flex-shrink:0}
+.inner>:first-child{margin-top:auto}.inner>:last-child{margin-bottom:auto}
+.kick{font-size:14px;color:var(--moss);font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.kick .tour{font-size:11.5px;color:#1d241f;background:var(--water);padding:3px 10px;border-radius:99px}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.01em}
+h2{font-size:clamp(34px,3.9vw,64px);line-height:1.03;max-width:22ch}
+.lede{font-size:clamp(15.5px,1.25vw,19px);line-height:1.6;color:var(--ink2);max-width:56ch;margin-top:14px}
+.src{font-size:12.5px;color:var(--ink3);line-height:1.45;margin-top:10px}
+.num{font-family:var(--disp);font-weight:600;line-height:.95;color:var(--gold);font-variant-numeric:lining-nums}
+.rv{will-change:transform,opacity}
+.round{border-radius:28px;overflow:hidden;position:relative}
+.round img{width:100%;height:100%;object-fit:cover}
+.cap{font-size:12px;color:var(--ink3);margin-top:6px;line-height:1.4}
+.row{display:grid;gap:clamp(18px,2.6vw,44px);align-items:center;flex:1 0 auto}
+.dots{width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .25s;flex:none}
+.dots svg{width:16px;height:16px;fill:#1d241f}
+[data-note]:hover .dots,.dots:hover{transform:scale(1.08)}
+[data-note]{cursor:pointer}
+[data-hl]{transition:opacity .25s,filter .25s,transform .25s}
+.mini{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center}
+.mini svg{width:34px;height:34px;stroke:rgba(255,255,255,.6);fill:none;stroke-width:1}
+.mini span{display:block;font-size:15px;color:var(--ink2)}
+.mini b{font-size:clamp(17px,1.4vw,22px);font-weight:700;color:var(--ink);font-family:var(--disp)}
+/* tarjetas mate */
+.mat{border-radius:26px;position:relative;overflow:hidden;box-shadow:0 18px 38px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.16)}
+.mat::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;mix-blend-mode:overlay;background:radial-gradient(120% 80% at 0% 0%,rgba(255,255,255,.5),transparent 55%)}
+.mat.g{background:linear-gradient(160deg,#6f9a5c,#4f7340)}
+.mat.b{background:linear-gradient(160deg,#7d5139,#583524)}
+.mat.t{background:linear-gradient(160deg,#2f5a4a,#1d3b30)}
+.mat.s{background:linear-gradient(160deg,#e6d3b3,#cdb48f);color:#2a2219}
+.mat.l{background:linear-gradient(160deg,#eef0ea,#d9ddd3);color:#1d241f}
+.mat .num{color:#f6e3b2}
+.mat.s .num{color:#6b4326}.mat.l .num{color:#2e5a35}
+.mat.s .t2,.mat.l .t2{color:rgba(42,34,25,.75)}
+.mat .t2{color:rgba(255,255,255,.8)}
+.emb{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.14);box-shadow:inset 0 2px 4px rgba(255,255,255,.2),inset 0 -3px 6px rgba(0,0,0,.25),0 6px 14px rgba(0,0,0,.25);flex:none}
+.mat.s .emb,.mat.l .emb{background:rgba(255,255,255,.55)}
+.emb svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mat .dots{position:absolute;right:14px;bottom:14px;width:40px;height:40px}.mat .dots svg{width:12px;height:12px}
+
+/* ---------- panel de un nivel, acoplado y siempre visible ---------- */
+.panel{position:fixed;z-index:40;left:0;top:0;width:min(600px,46vw);max-height:calc(100vh - 96px);overflow:auto;background:var(--card);color:var(--cardInk);border-radius:28px;padding:0 32px 26px;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.4);opacity:0;pointer-events:none;transform:scale(.96);transform-origin:var(--ox,50%) var(--oy,50%);transition:opacity .22s,transform .28s}
+.panel.open{opacity:1;pointer-events:auto;transform:none}
+.panel.dragging{transition:none;box-shadow:0 50px 120px rgba(0,0,0,.7);cursor:grabbing}
+.panel .grab{position:sticky;top:0;z-index:2;margin:0 -32px;padding:12px 32px 4px;background:var(--card);cursor:grab;display:flex;justify-content:center;touch-action:none}
+.panel .grab i{display:block;width:46px;height:5px;border-radius:9px;background:rgba(29,36,31,.2)}
+.panel .grab:hover i{background:rgba(29,36,31,.4)}
+.panel .phead{cursor:grab;touch-action:none}
+.panel .pk{font-size:15px;color:#2e5a35;font-weight:700;padding-right:44px;margin-top:6px}
+.panel h3{font-size:clamp(30px,2.6vw,42px);line-height:1.04;margin-top:6px;color:var(--cardInk)}
+.panel .pn{display:flex;align-items:baseline;gap:12px;margin-top:14px;flex-wrap:wrap}
+.panel .pn .num{font-size:clamp(54px,4.6vw,76px);color:#2e5a35}
+.panel .pn span{font-size:17px;color:var(--cardInk2);max-width:26ch;line-height:1.3}
+.panel p{font-size:18px;line-height:1.55;color:rgba(29,36,31,.88);margin-top:12px}
+.panel .ps{font-size:13px;color:rgba(29,36,31,.55);margin-top:14px;padding-top:12px;border-top:1px solid rgba(29,36,31,.12)}
+.panel .close{position:absolute;top:22px;right:22px;z-index:3;width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.panel .close svg{width:14px;height:14px;stroke:#1d241f;stroke-width:1.8;fill:none}
+#lead{position:fixed;inset:0;z-index:39;pointer-events:none;width:100%;height:100%}
+#lead line{stroke:#fff;stroke-width:1.6;stroke-dasharray:2 4}#lead circle{fill:#fff}#lead circle.ring{fill:none;stroke:#fff;stroke-width:1.6}
+.vis{margin:16px 0 4px}
+.vis svg{width:100%;height:auto;display:block;overflow:visible}
+.vis text{font-family:var(--sans)}
+.vis .t-s{font-size:15px;fill:rgba(22,20,15,.66)}
+.vis .t-m{font-size:17px;fill:#16140f;font-weight:500}
+.vis .t-b{font-family:var(--disp);font-size:34px;fill:#16140f;font-weight:600}
+.vis .t-c{fill:#8a4426}
+.vis figure img{width:100%;border-radius:16px}
+.vis figcaption{font-size:13.5px;color:rgba(29,36,31,.55);margin-top:6px}
+.vis .darkbox{background:#1f2621;border-radius:18px;padding:12px}
+.vis .darkbox .t-s{font-size:21px;fill:rgba(241,242,236,.78)}.vis .darkbox .t-m{font-size:25px;fill:#f1f2ec;font-weight:700}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gal figure img{aspect-ratio:1;object-fit:cover;border-radius:14px}
+.gal figcaption{font-size:14px;color:rgba(29,36,31,.8);margin-top:5px;line-height:1.3}.gal figcaption small{display:block;color:rgba(29,36,31,.55)}
+.icons3,.icons4{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.icons4{grid-template-columns:repeat(4,1fr)}
+.icons3>div,.icons4>div{background:#fff;border-radius:18px;padding:16px 14px}
+.icons3 svg,.icons4 svg{width:44px!important;height:44px;fill:none;stroke:#2e5a35;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-bottom:8px}
+.icons3 b,.icons4 b{display:block;font-family:var(--disp);font-size:19px;line-height:1.15}.icons3 span,.icons4 span{display:block;font-size:14px;color:rgba(29,36,31,.62);margin-top:4px;line-height:1.35}
+.read{display:flex;gap:10px;align-items:flex-start;font-size:clamp(15px,1.15vw,17px);line-height:1.45;color:var(--ink);margin-top:14px;max-width:64ch;padding:10px 14px;border-radius:16px;background:rgba(156,191,115,.1);border:1px solid rgba(156,191,115,.25)}
+.read svg{flex:none;width:22px;height:22px;stroke:var(--leaf);fill:none;stroke-width:1.8;stroke-linecap:round;margin-top:1px}
+.read b{color:var(--leaf);font-weight:700}
+.refo{margin-top:16px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,3fr) minmax(0,.8fr);gap:18px;align-items:center;padding:18px 22px;border-radius:26px;background:linear-gradient(120deg,rgba(111,154,92,.32),rgba(47,90,74,.32));border:1.5px solid rgba(195,217,157,.55);box-shadow:0 18px 40px rgba(0,0,0,.3)}
+.refo .tag{display:inline-block;font-size:13px;font-weight:700;color:#1d241f;background:var(--leaf);padding:4px 12px;border-radius:99px}
+.refo h3{font-size:clamp(22px,1.9vw,30px);line-height:1.08;margin-top:8px}
+.refo ol{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;position:relative}
+.refo ol::before{content:"";position:absolute;left:5%;right:5%;top:26px;border-top:2px dashed rgba(195,217,157,.5)}
+.refo li{position:relative;text-align:center}
+.refo li svg{width:52px;height:52px;padding:10px;border-radius:50%;background:#2a3a2c;border:1.5px solid var(--leaf);stroke:var(--leaf);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto 6px}
+.refo li b{display:block;font-family:var(--disp);font-size:clamp(18px,1.5vw,24px);color:#fff}
+.refo li span{display:block;font-size:13.5px;line-height:1.3;color:var(--ink2);margin-top:2px}
+.refo li.hl svg{background:var(--leaf);stroke:#1d241f}
+.refo .tot .num{font-size:clamp(34px,3vw,48px);color:var(--leaf)}
+.refo .tot span{display:block;font-size:14px;color:var(--ink2);line-height:1.35;margin-top:4px}
+.st6.hi{outline:3px solid var(--leaf);outline-offset:3px}
+.st6 .rtag{position:absolute;top:14px;right:14px;font-size:11.5px;font-weight:700;color:#1d241f;background:var(--leaf);padding:3px 9px;border-radius:99px}
+.h2row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end}
+.now svg{width:34px;height:34px;stroke:var(--leaf);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;display:block;margin-bottom:8px}
+.ric{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.85;margin-bottom:6px;display:block}
+.ringtxt{margin-top:12px;min-height:76px;padding:12px 16px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:15.5px;color:var(--ink2);line-height:1.45}
+.ringtxt b{display:block;font-family:var(--disp);font-size:20px;color:var(--ink)}
+.rows{margin-top:6px}
+.rows>div{display:grid;grid-template-columns:56px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid rgba(29,36,31,.1);align-items:start}
+.rows b{font-size:17px}.rows span{display:block;font-size:15px;color:rgba(29,36,31,.68);margin-top:2px;line-height:1.42}
+.badge{display:inline-grid;place-items:center;height:26px;padding:0 8px;font-size:11.5px;font-weight:700;border:1.5px solid currentColor;border-radius:6px}
+.badge.cr{color:#7a2f1f}.badge.en{color:#b4582f}
+.rows.two{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}.rows.two>div{grid-template-columns:44px 1fr}.badge.vu{color:#9a7a2a}.badge.q{color:#8d877b}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.chips span{font-size:15px;padding:7px 12px;border-radius:99px;background:#fff}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.grow{transform-origin:left center;animation:grow 1.1s cubic-bezier(.2,.75,.2,1) both}
+.growy{transform-box:fill-box;transform-origin:center bottom;animation:growy 1.1s cubic-bezier(.2,.75,.2,1) both}
+.pop{transform-box:fill-box;transform-origin:center;animation:pop .5s cubic-bezier(.2,.75,.2,1.2) both}
+@keyframes grow{from{transform:scaleX(0)}}@keyframes growy{from{transform:scaleY(0)}}@keyframes pop{from{transform:scale(0);opacity:0}}
+.drift{animation:drift 22s ease-in-out infinite alternate}.drift.b{animation-duration:30s;animation-delay:-9s}
+@keyframes drift{to{transform:translateX(-50px)}}
+.fall{stroke-dasharray:6 8;animation:fall 1.2s linear infinite}.flow{stroke-dasharray:7 10;animation:fall 1.4s linear infinite}
+@keyframes fall{to{stroke-dashoffset:-28}}
+@keyframes float{0%,100%{transform:translate(0,0) rotate(-2deg)}50%{transform:translate(-18px,-10px) rotate(1deg)}}
+
+/* ================= 1 PORTADA ================= */
+#s1 .photo{position:absolute;right:0;top:0;bottom:0;width:72%;z-index:0}
+#s1 .photo img{width:100%;height:100%;object-fit:cover;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.7) 22%,#000 45%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.7) 22%,#000 45%)}
+#s1::before{background:linear-gradient(90deg,rgba(24,29,25,.6) 0%,rgba(24,29,25,0) 50%),linear-gradient(0deg,rgba(18,22,19,.8) 0%,transparent 50%)}
+#s1 .row{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+#s1 h1{font-size:clamp(70px,9.4vw,152px);line-height:.9;font-weight:500;letter-spacing:-.03em}
+#s1 .tag{font-size:clamp(19px,1.7vw,27px);line-height:1.38;color:var(--ink);max-width:28ch;margin-top:24px}
+.startbtn{display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:8px 24px 8px 8px;border:1px solid rgba(255,255,255,.45);border-radius:99px;font-weight:500;font-size:16px;background:rgba(20,25,21,.35)}
+.startbtn .dots{width:44px;height:44px;background:rgba(255,255,255,.16);box-shadow:none}.startbtn .dots svg{fill:#fff}
+.keys{display:grid;gap:16px;align-self:end;margin-bottom:10px}
+.key{display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:center;padding:16px 20px;border-radius:24px;background:rgba(20,25,21,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.key .num{font-size:clamp(30px,2.6vw,42px);color:#fff}
+.key span{display:block;font-size:16px;color:var(--ink2);margin-top:4px;line-height:1.35}
+.key svg{width:56px;height:56px}
+
+/* ================= 2 IMPORTANCIA ================= */
+#s2 .row{grid-template-columns:minmax(0,.95fr) minmax(0,1.3fr)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 26px;margin-top:22px}
+.stat{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line);text-align:left}
+.stat .n{width:30px;height:30px;border-radius:50%;background:#fff;color:#1d241f;display:grid;place-items:center;font-size:13px;font-weight:700}
+.stat .num{font-size:clamp(30px,2.6vw,42px)}
+.stat .num small{font-size:.45em;color:var(--ink2);font-weight:500;margin-left:4px}
+.stat>div>span{display:block;font-size:15.5px;color:var(--ink2);margin-top:5px;line-height:1.35}
+.stat.lit .n{background:var(--moss)}
+.isoWrap{position:relative}
+.iso svg{width:100%;height:auto;display:block;overflow:visible}
+.iso .mk{cursor:pointer}.iso .mk circle{fill:#fff}.iso .mk text{fill:#1d241f;font:700 14px var(--sans)}
+.iso .mk.lit circle{fill:var(--moss)}
+.iso .halo{fill:none;stroke:#fff;stroke-width:1.5;opacity:.6;animation:halo 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes halo{0%{transform:scale(.7);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+.isoWrap .condor{position:absolute;right:-2%;top:-8%;width:44%;filter:drop-shadow(0 24px 24px rgba(0,0,0,.45));animation:float 14s ease-in-out infinite}
+.isoWrap .bird{position:absolute;filter:drop-shadow(0 10px 10px rgba(0,0,0,.4));transition:transform .3s}
+.isoWrap .bird:hover,.isoWrap .condor:hover{transform:translateY(-6px) scale(1.04)}
+.fauna{display:flex;align-items:center;gap:16px;margin-top:20px;padding:14px 18px;border-radius:22px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.fauna .num{font-size:clamp(38px,3.4vw,54px)}
+.fauna p{font-size:15.5px;color:var(--ink2);line-height:1.4}
+.fauna .sil{display:flex;gap:6px;margin-left:auto}
+.fauna .sil button{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);transition:background .2s}
+.fauna .sil button:hover{background:rgba(255,255,255,.25)}
+.fauna .sil svg{width:30px;height:24px;fill:#f1f2ec}
+
+/* ================= 3 KEWIÑA ================= */
+#s3 .row{grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)}
+.treebox{position:relative;height:calc(100vh - 210px);min-height:440px;margin-top:20px}
+.treebox img.tr{position:absolute;left:50%;bottom:0;height:100%;transform:translateX(-50%);filter:drop-shadow(0 40px 40px rgba(0,0,0,.6))}
+.treebox .shadow{position:absolute;left:22%;right:22%;bottom:-1%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.7),transparent);filter:blur(6px)}
+.tpin{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;z-index:4}
+.tpin.lft{flex-direction:row-reverse;transform:translate(calc(-100% + 22px),-50%)}
+.tpin:not(.lft){transform:translate(-22px,-50%)}
+.tpin .d{width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 0 rgba(255,255,255,.5);animation:ping 2.6s infinite;flex:none}
+.tpin .d svg{width:14px;height:14px;fill:#1d241f}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,255,255,.45)}100%{box-shadow:0 0 0 16px rgba(255,255,255,0)}}
+.tpin b{font-family:var(--disp);font-size:clamp(17px,1.5vw,23px);font-weight:600;background:rgba(14,18,15,.7);padding:6px 14px;border-radius:99px;white-space:nowrap}
+.tpin:hover .d{background:var(--moss)}
+.spec{margin-top:24px;display:grid;gap:12px}
+.spec .mini b{font-size:clamp(18px,1.6vw,24px)}
+
+/* ================= 4 PROBLEMA Y OPORTUNIDAD ================= */
+#s4 .row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}
+.half{display:flex;flex-direction:column;justify-content:center}
+.half h3{font-size:clamp(26px,2.4vw,38px);line-height:1.06;max-width:20ch}
+.ten{display:flex;gap:clamp(3px,.6vw,10px);align-items:flex-end;margin-top:18px}
+.ten svg{width:clamp(34px,3.6vw,58px);height:auto;overflow:visible}
+.ten .gone{color:rgba(255,255,255,.35)}
+.causes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.cause{padding:16px 18px;display:grid;grid-template-columns:60px 1fr;gap:14px;align-items:center;text-align:left}
+.cause b{font-family:var(--disp);font-size:22px;display:block}
+.cause .num{font-size:clamp(24px,2vw,32px);margin-top:2px}
+.cause .t2{font-size:15px;display:block;margin-top:3px;line-height:1.35}
+.compare{position:relative;width:100%;flex:1;min-height:300px;max-height:46vh;overflow:hidden;user-select:none;touch-action:pan-y;cursor:ew-resize;border-radius:28px;margin-top:16px}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.compare .after{clip-path:inset(0 0 0 50%)}
+.compare .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff}
+.compare .knob{position:absolute;top:50%;left:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:#fff;color:#1d241f;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.compare .knob svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.6}
+.compare .lb{position:absolute;bottom:14px;padding:8px 12px;background:rgba(233,235,229,.95);color:#1d241f;border-radius:14px;font-size:14px;line-height:1.3;max-width:46%}
+.compare .lb b{font-family:var(--disp);font-size:17px;display:block}
+.compare .lb.l{left:14px}.compare .lb.r{right:14px;text-align:right}
+.opp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.opp>button{padding:16px 18px;text-align:left}
+.opp .num{font-size:clamp(30px,2.6vw,42px)}
+.opp .t2{font-size:15px;display:block;margin-top:6px;line-height:1.35;padding-right:30px}
+
+/* ================= 5 PROPUESTA ================= */
+.goalbox{font-family:var(--disp);font-size:clamp(22px,2.1vw,34px);line-height:1.22;max-width:40ch;margin-top:14px;color:var(--ink)}
+.goalbox em{font-style:normal;color:var(--gold)}
+.objs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+.obj{padding:22px 24px 24px;text-align:left;display:flex;flex-direction:column;gap:8px;min-height:240px}
+.obj small{font-size:14px;font-weight:700;opacity:.85}
+.obj h3{font-size:clamp(22px,1.9vw,30px);line-height:1.1}
+.obj .num{font-size:clamp(46px,4.2vw,68px);margin-top:auto}
+.obj .t2{font-size:16.5px;line-height:1.45}
+.now{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:22px}
+.now>div{border-top:1px solid var(--line);padding-top:10px}
+.now .num{font-size:clamp(26px,2.2vw,36px)}
+.now>div>span{display:block;font-size:15.5px;color:var(--ink2);margin-top:6px;line-height:1.38}
+
+/* ================= 6 MODELO ================= */
+#s6 .row{grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr)}
+.sankey svg{width:100%;height:auto;display:block;overflow:visible;max-height:calc(100vh - 170px)}
+.sankey text{font-family:var(--sans)}
+.sankey .t-m{font-size:18px;font-weight:700;fill:var(--ink)}
+.sankey .t-s{font-size:15px;fill:var(--ink2)}
+.sankey .t-b{font-family:var(--disp);font-size:42px;font-weight:600}
+.sankey .st{transition:opacity .25s;cursor:pointer}
+.sankey.hl-on .st:not(.lit){opacity:.35}
+.inno{display:grid;gap:12px;margin-top:22px}
+.inno>div{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center;padding:14px 16px}
+.inno .emb{width:52px;height:52px}.inno .emb svg{width:26px;height:26px}
+.inno b{font-size:18.5px;display:block;font-family:var(--disp)}
+.inno .t2{font-size:15.5px;line-height:1.4}
+
+/* ================= 7 OFERTA ================= */
+#s7 .row{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.exps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.exp{padding:20px 20px 22px}
+.exp small{font-size:13.5px;font-weight:700;opacity:.85}
+.exp h3{font-size:clamp(22px,1.8vw,28px);line-height:1.08;margin-top:4px}
+.exp ul{list-style:none;margin-top:10px}
+.exp li{font-size:15.5px;line-height:1.4;padding:6px 0 6px 18px;position:relative;border-top:1px solid rgba(255,255,255,.18)}
+.mat.s .exp li,.exp.s li{border-color:rgba(42,34,25,.15)}
+.exp li::before{content:"";position:absolute;left:0;top:12px;width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.7}
+.cal{margin-top:18px}
+.cal h4{font-size:16px;font-weight:600;margin-bottom:8px}
+.cal>svg{width:100%;height:auto;display:block}
+.collage{position:relative;height:calc(100vh - 170px);min-height:520px}
+.collage .ph{position:absolute;border-radius:26px;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.4);transition:transform .35s}
+.collage .ph[data-note]{cursor:pointer}
+.collage .ph:hover{transform:translateY(-6px)}
+.collage .ph img{width:100%;height:100%;object-fit:cover}
+.collage .ph span{position:absolute;left:12px;bottom:12px;background:rgba(233,235,229,.95);color:#1d241f;font-size:14.5px;font-weight:700;padding:6px 12px;border-radius:99px}
+.collage .person{position:absolute;right:0;bottom:0;height:70%;filter:drop-shadow(0 30px 30px rgba(0,0,0,.5));pointer-events:none}
+.collage .count{position:absolute;left:0;bottom:0;padding:16px 20px}
+.collage .count .num{font-size:52px}
+
+/* ================= 8 CAMINO ================= */
+.road svg{width:100%;height:auto;display:block;touch-action:none;user-select:none;overflow:visible;max-height:calc(100vh - 440px)}
+.road text{font-family:var(--sans)}
+.road .car{cursor:grab}
+.roadrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:30px;align-items:end;margin-top:10px}
+.clock .num{font-size:clamp(52px,5vw,80px)}
+.clock .seg{font-size:17px;color:var(--ink2);line-height:1.5;margin-top:8px}
+.clock .seg b{color:var(--ink);font-size:17px}
+.lg{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--ink2)}
+.lg i{display:inline-block;width:26px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}
+.access{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.access>div{padding:14px 16px}
+.access .num{font-size:30px}
+.access .t2{font-size:14px;display:block;margin-top:4px}
+
+/* ================= 9 ACTIVIDADES ================= */
+.phases{display:grid;grid-template-columns:3fr 2fr 1fr;gap:6px;margin-top:18px;font-size:14px;font-weight:700;color:var(--ink2)}
+.phases div{padding:8px 10px;border-radius:99px;background:rgba(255,255,255,.07);text-align:center}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:12px}
+.st6{padding:16px 16px 18px;position:relative}
+.st6 .emb{width:46px;height:46px}.st6 .emb svg{width:28px;height:28px}
+.st6 .k{font-size:13.5px;font-weight:700;margin-top:8px;opacity:.8}
+.st6 h3{font-size:clamp(19px,1.55vw,24px);line-height:1.08;margin-top:2px}
+.st6 dl{margin-top:8px;font-size:14.5px;line-height:1.42}
+.st6 dt{font-size:12.5px;font-weight:700;margin-top:8px;opacity:.7}
+.st6 dd{opacity:.9}
+.who{display:inline-block;margin:10px 4px 0 0;font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.9);color:#1d241f}
+.budget{margin-top:22px}
+.budget .lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:14.5px;color:var(--ink2);margin-bottom:8px}
+.budget .lbl b{font-family:var(--disp);font-size:22px;color:var(--ink)}
+.budget .bars{display:flex;gap:3px;height:34px;border-radius:12px;overflow:hidden}
+.budget .bars div{display:flex;align-items:center;padding:0 10px;font-size:12px;font-weight:700;color:#1d241f;white-space:nowrap;overflow:hidden}
+.budget .names{display:flex;gap:3px;margin-top:6px}
+.budget .names span{font-size:13px;color:var(--ink3);overflow:hidden;line-height:1.25}
+
+/* ================= 10 RESULTADOS ================= */
+.res{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(min(230px,27vh),auto);gap:18px;margin-top:28px}
+.re{padding:26px 28px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;text-align:left;min-height:min(210px,24vh)}
+.re .num{font-size:clamp(60px,5.6vw,96px)}
+.re h4{font-size:clamp(20px,1.8vw,28px);line-height:1.12}
+.re .t2{font-size:16.5px;display:block;margin-top:6px;line-height:1.4;padding-right:34px}
+
+/* ================= 11 WARMI ================= */
+#s11 .row{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+.warmi{position:relative;height:calc(100vh - 160px);min-height:480px}
+.warmi .ph{position:absolute;border-radius:26px;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.45)}
+.warmi .ph img{width:100%;height:100%;object-fit:cover}
+.warmi .ph span{position:absolute;left:12px;bottom:12px;background:rgba(233,235,229,.95);color:#1d241f;font-size:14.5px;font-weight:700;padding:6px 12px;border-radius:99px}
+.warmi .ph[data-note]{cursor:pointer}.warmi .ph[data-note]:hover{transform:translateY(-4px);transition:transform .3s}
+.warmi .badge20{position:absolute;right:3%;top:40%;padding:18px 22px 20px;width:230px;z-index:2}
+.warmi .badge20 .num{font-size:64px}
+.pot{margin-top:18px}.pot h4{font-size:17px;font-weight:600}
+.pot ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pot li{display:flex;align-items:center;gap:8px;font-size:15px;padding:7px 14px 7px 8px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18)}
+.pot li svg{width:28px;height:28px;padding:5px;border-radius:50%;background:var(--leaf);stroke:#1d241f;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wstats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.wstat{padding:18px 18px 20px;text-align:left}
+.wstat .num{font-size:clamp(34px,2.9vw,46px)}
+.wstat .t2{display:block;font-size:15.5px;margin-top:6px;line-height:1.4;padding-right:34px}
+.wline{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;position:relative;margin-top:12px}
+.wline::before{content:"";position:absolute;left:4%;right:4%;top:16px;border-top:1px dashed rgba(255,255,255,.3)}
+.wline div{position:relative;text-align:center;font-size:14px;color:var(--ink2);line-height:1.3}
+.wline i{display:block;width:32px;height:32px;border-radius:50%;margin:0 auto 6px;border:2px solid var(--moss);background:var(--olive1);font-style:normal;font-size:13px;font-weight:700;line-height:28px;color:var(--ink)}
+.wline .lead i{background:var(--moss);color:#1d241f}
+.wdec{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.wdec span{font-size:15px;padding:8px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.3)}
+
+/* ================= 12 ALIANZA ================= */
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.tm{display:grid;grid-template-columns:42% 1fr;min-height:250px;text-align:left}
+.tm .im{position:relative;background:rgba(0,0,0,.12)}
+.tm .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tm .im img.cutimg{object-fit:contain;object-position:bottom}
+.tm .bd{padding:20px 20px 64px}
+.tm small{font-size:13.5px;font-weight:700;opacity:.8}
+.tm h3{font-size:clamp(24px,2vw,32px);margin-top:4px}
+.tm .num{font-size:clamp(32px,2.8vw,44px);margin-top:10px}
+.tm .t2{font-size:15.5px;margin-top:6px;line-height:1.4;display:block}
+.gov{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+.gov>div,.gov>button{padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);text-align:left}
+.gov b{font-family:var(--disp);font-size:19px;display:block}
+.gov span{font-size:14px;color:var(--ink2);line-height:1.35;display:block;margin-top:4px}
+
+/* ================= 13 GARANTÍAS ================= */
+.guar{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.gq{padding:22px 24px 24px;text-align:left;display:flex;flex-direction:column;gap:8px}
+.gq header{display:flex;gap:14px;align-items:center}
+.gq h3{font-size:clamp(22px,1.8vw,28px);line-height:1.08}
+.gq ul{list-style:none;margin-top:4px}
+.gq li{font-size:16px;line-height:1.42;padding:7px 0;border-top:1px solid rgba(255,255,255,.16)}
+.mat.s .gq li,.gq.s li,.gq.l li{border-color:rgba(42,34,25,.14)}
+.gq li b{font-family:var(--disp)}
+
+/* ================= 14 ESCALA Y CIERRE ================= */
+#s14 .row{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)}
+.mapwrap{position:relative;border-radius:28px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.mapwrap img{width:100%;display:block}
+.mapwrap svg{position:absolute;inset:0;width:100%;height:100%}
+.mapwrap .rg{cursor:pointer}
+.mapwrap .rg.lit circle,.mapwrap .rg.lit rect{stroke-width:6}
+.rl5{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.rl5 button{font-size:15px;padding:8px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.28)}
+.rl5 button.lit{background:#fff;color:#1d241f}
+#s14 h2{font-size:clamp(34px,3.4vw,56px)}
+.commit{list-style:none;margin-top:18px}
+.commit li{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:17px;color:var(--ink2);line-height:1.45}
+.commit li svg{width:22px;height:22px;stroke:var(--moss);fill:none;stroke-width:2}
+.ask{display:flex;align-items:baseline;gap:12px;margin-top:18px;font-size:14px;color:var(--ink2)}
+.ask b{font-family:var(--disp);font-size:30px;color:var(--gold)}
+.signs{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:var(--ink2)}
+.signs b{display:block;font-family:var(--disp);font-size:19px;color:var(--ink)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){.thread button span.lbl{display:none}.thread button.now span.lbl{display:inline}}
+@media (max-width:1100px){
+  .row{display:block!important}.row>*+*{margin-top:28px}
+  .inner{justify-content:flex-start}
+  #s1 .photo{width:100%;opacity:.4}
+  .treebox{height:520px}
+  .collage{height:560px}.warmi{height:520px}
+  .objs,.res,.team{grid-template-columns:1fr}.steps{grid-template-columns:repeat(3,1fr)}.phases{display:none}
+  .now{grid-template-columns:1fr 1fr}.gov{grid-template-columns:1fr 1fr}.guar{grid-template-columns:1fr}
+  .roadrow{grid-template-columns:1fr}.refo{grid-template-columns:1fr}.h2row{grid-template-columns:1fr}
+  .panel{width:min(600px,calc(100vw - 32px))}
+}
+@media (max-width:700px){
+  html,body{font-size:15px}
+  .inner{padding:122px 16px 110px}
+  .top{flex-wrap:wrap;gap:8px}.thread{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto}
+  .chrome.bl{display:none}.ticks{bottom:82px}
+  .chrome.br{left:16px;right:16px;justify-content:space-between}
+  .stats,.exps,.wstats,.opp,.causes,.now{grid-template-columns:1fr}
+  .rows.two{grid-template-columns:1fr}.icons4{grid-template-columns:1fr 1fr}.budget .names{display:none}.icons3{grid-template-columns:1fr}.gal{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr}.refo ol{grid-template-columns:1fr 1fr}.refo ol::before{display:none}
+  .road{overflow-x:auto;margin:0 -16px;padding:0 16px}.road svg{min-width:760px;max-height:none}
+  .panel{top:auto!important;bottom:0;left:0!important;right:0!important;width:100%;max-height:78vh;border-radius:26px 26px 0 0;transform:translateY(20px);padding:0 20px 22px}.panel .grab{margin:0 -20px;padding:10px 20px 4px;cursor:default}
+  .panel.open{transform:none}
+  #lead{display:none}
+  .tm{grid-template-columns:38% 1fr}
+  .tpin b{font-size:14px}
+  .dd{position:fixed;right:12px;left:12px;width:auto;top:60px}
+}
+@media (max-height:780px) and (min-width:1101px){
+  .inner{padding-top:72px;padding-bottom:70px}.chrome.bl,.ticks{display:none}
+  h2{font-size:clamp(30px,3.2vw,48px)}
+  .obj{min-height:200px;padding:18px 20px}.re{min-height:120px}.res{grid-auto-rows:auto}
+  .goalbox{font-size:clamp(18px,1.6vw,24px)}.objs{margin-top:16px}.now{margin-top:14px}
+  .refo{padding:12px 16px;margin-top:10px}.refo li svg{width:42px;height:42px;padding:8px}.refo li span{font-size:12.5px}
+  .st6{padding:14px 14px 16px}.st6 dl{font-size:13.5px}.st6 .emb{width:44px;height:44px}.steps{margin-top:8px}.budget{margin-top:12px}
+  .road svg{max-height:calc(100vh - 300px)}.clock .num{font-size:44px}
+  .exp li{font-size:14px;padding:4px 0 4px 18px}.exp{padding:14px 16px}.cal{margin-top:10px}
+  .gq{padding:16px 20px}.gq li{padding:5px 0;font-size:15px}.guar{margin-top:14px;gap:12px}
+  .compare{min-height:220px}.cal>svg{max-height:150px}.opp>button{padding:12px 14px}.cause{padding:12px 14px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="kw" viewBox="0 0 40 60"><path d="M20 60c0-8-2-13-7-20M20 60c1-9 4-15 9-22M20 54c0-7 1-13 0-21" stroke="#8a4a2a" stroke-width="2.6" fill="none" stroke-linecap="round"/><g fill="#5f7a45"><ellipse cx="12" cy="36" rx="9" ry="6.5"/><ellipse cx="29" cy="33" rx="10" ry="7.5"/><ellipse cx="20" cy="23" rx="11" ry="8.5"/><ellipse cx="13" cy="16" rx="7" ry="5.5"/><ellipse cx="27" cy="14" rx="7.5" ry="6"/></g><g fill="#9cbf73"><ellipse cx="18" cy="18" rx="5" ry="3.2"/><ellipse cx="31" cy="29" rx="4.5" ry="2.8"/><ellipse cx="10" cy="33" rx="4" ry="2.5"/></g></symbol>
+    <symbol id="kw0" viewBox="0 0 40 60"><path d="M20 60c0-8-2-13-7-20M20 60c1-9 4-15 9-22M20 54c0-7 1-13 0-21" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><g fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3"><ellipse cx="12" cy="36" rx="9" ry="6.5"/><ellipse cx="29" cy="33" rx="10" ry="7.5"/><ellipse cx="20" cy="23" rx="11" ry="8.5"/></g></symbol>
+    <symbol id="sprout" viewBox="0 0 20 24"><path d="M10 24V11" stroke="#8a4426" stroke-width="1.6" fill="none"/><path d="M10 13C5 13 3 9 3 6c4 0 7 2 7 7zM10 11c0-5 3-7 7-7 0 4-2 7-7 7z" fill="#5f7a45"/></symbol>
+    <symbol id="person" viewBox="0 0 20 60"><circle cx="10" cy="6" r="5" fill="currentColor"/><path d="M4 16h12l-1 20h-2l-1 24H8l-1-24H5z" fill="currentColor"/></symbol>
+    <symbol id="dotsI" viewBox="0 0 16 16"><circle cx="3" cy="3" r="1.6"/><circle cx="8" cy="3" r="1.6"/><circle cx="13" cy="3" r="1.6"/><circle cx="3" cy="8" r="1.6"/><circle cx="8" cy="8" r="1.6"/><circle cx="13" cy="8" r="1.6"/><circle cx="3" cy="13" r="1.6"/><circle cx="8" cy="13" r="1.6"/><circle cx="13" cy="13" r="1.6"/></symbol>
+    <symbol id="s-bird" viewBox="0 0 64 48"><path d="M8 30C8 20 18 13 29 15c4-7 13-7 15 0l7 1-6 4c0 11-8 18-21 18L12 46l3-10c-4-1-7-3-7-6z"/></symbol>
+    <symbol id="s-cat" viewBox="0 0 64 60"><path d="M20 58c-5-12-3-24 3-30l-2-13 7 7c3-1 7-1 10 0l7-7-2 13c7 6 8 19 3 30z"/></symbol>
+    <symbol id="s-deer" viewBox="0 0 84 60"><path d="M12 28c0-6 7-8 17-7h23c6 0 8-4 10-8l-2-7 4 5 2-6 2 7c4 1 6 5 4 7l-6 2c-2 6-6 8-10 8v20h-3l-1-16H29l-2 16h-3l-1-17c-6 0-11-1-11-4z"/></symbol>
+    <symbol id="s-bear" viewBox="0 0 84 60"><path d="M10 40c-2-10 6-18 20-19 10-1 22 1 28 5 4-6 12-6 14 0 4 2 4 8 0 10l-4 2c-2 6-4 10-6 16h-6v-8H36l-2 8h-6v-8c-10 2-16 0-18-6z"/></symbol>
+    <symbol id="spiral" viewBox="0 0 30 30"><g stroke-width="1"><path d="M15 3v24M3 15h24M6.5 6.5l17 17M23.5 6.5l-17 17"/><circle cx="15" cy="15" r="11" stroke-dasharray="2 3"/></g></symbol>
+  </defs>
+</svg>
+<svg id="lead" aria-hidden="true"></svg>
+
+<header class="top">
+  <span class="word"><svg viewBox="0 0 40 60"><use href="#kw"/></svg>Kewiña Viva</span>
+  <nav class="thread" id="thread" aria-label="Fases de la presentación"></nav>
+  <div class="tools">
+    <button class="tlink" id="idxBtn" aria-expanded="false" aria-controls="dd">Índice <svg viewBox="0 0 12 12"><path d="M2 4l4 4 4-4"/></svg></button>
+    <button class="tlink" id="fsBtn">Pantalla completa</button>
+    <div class="dd" id="dd" role="menu"></div>
+  </div>
+</header>
+<div class="chrome bl" aria-live="polite"><b id="wNum">01</b><span id="wName">Portada</span></div>
+<div class="ticks" id="ticks" aria-label="Láminas"></div>
+<div class="chrome br">
+  <button class="arrow" id="prev" aria-label="Lámina anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="arrow" id="next" aria-label="Lámina siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
+
+<main class="deck">
+
+<!-- ================= 1 · PORTADA ================= -->
+<section class="scene" id="s1" data-title="Portada" data-phase="0">
+  <!-- REEMPLAZAR_FOTO_SLIDE_1 -->
+  <div class="photo"><img src="img/lagunas_panorama.jpg" alt="Lagunas altoandinas de la vertiente norte del Tunari"></div>
+  <div class="giant">KEWIÑA</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <span class="kick rv" style="color:#fff">Chiaraje · Cocapata · Cochabamba, Bolivia</span>
+        <h1 class="rv">Kewiña<br>Viva</h1>
+        <p class="tag rv">Restaurar los bosques de kewiña del Tunari a través del turismo de naturaleza.</p>
+        <button class="startbtn rv" data-goto="1"><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span>Conocer el proyecto</button>
+      </div>
+      <div class="keys rv">
+        <div class="key"><svg viewBox="0 0 48 48" fill="none" stroke="#e0bc68" stroke-width="1.6"><circle cx="24" cy="24" r="21"/><circle cx="24" cy="24" r="14" stroke-dasharray="3 3"/><circle cx="24" cy="24" r="5" fill="#e0bc68"/></svg><div><div class="num">KBA BOL32</div><span>Área Clave de Biodiversidad: Parque Nacional Tunari</span></div></div>
+        <div class="key"><svg viewBox="0 0 48 60"><use href="#kw" x="8" y="2" width="32" height="54"/></svg><div><div class="num">3.500–4.600 m</div><span>bosque de <i>Polylepis pacensis</i>, En Peligro y endémica de Bolivia</span></div></div>
+        <div class="key"><svg viewBox="0 0 48 48" fill="none" stroke="#8fc4d6" stroke-width="1.6"><path d="M24 5C17 16 12 23 12 30a12 12 0 0 0 24 0c0-7-5-14-12-25z"/><path d="M18 31c0 4 3 6 6 6"/></svg><div><div class="num">2.800 L/s</div><span>de agua para Cochabamba desde la cordillera del Tunari</span></div></div>
+        <div class="key"><svg viewBox="0 0 48 48" fill="none" stroke="#9cbf73" stroke-width="1.6"><path d="M6 36h36l-4-9-6-7H16l-6 7z"/><circle cx="15" cy="38" r="4"/><circle cx="33" cy="38" r="4"/></svg><div><div class="num">2 experiencias</div><span>de turismo de naturaleza, probadas con salidas pagadas</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2 · POR QUÉ IMPORTA ================= -->
+<section class="scene" id="s2" data-title="Por qué importa" data-phase="1">
+  <!-- REEMPLAZAR_FONDO_SLIDE_2 -->
+  <div class="bgp" style="background-image:url(img/bg_rocas.jpg)"></div>
+  <div class="giant">TUNARI</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <span class="kick rv">Importancia del territorio</span>
+        <h2 class="rv">Un lugar clave para el agua y la fauna de los Andes</h2>
+        <div class="stats rv">
+          <button class="stat" data-hl="a"><span class="n">1</span><div><div class="num"><span data-count="729"></span><small>ha</small></div><span>de la comunidad de Chiaraje, en la vertiente norte</span></div></button>
+          <button class="stat" data-hl="b"><span class="n">2</span><div><div class="num">5.200<small>m</small></div><span>altura máxima que alcanzan los bosques de kewiña</span></div></button>
+          <button class="stat" data-hl="c"><span class="n">3</span><div><div class="num"><span data-count="177"></span></div><span>aves en los kewiñales del PN Tunari; 10 solo existen en Bolivia</span></div></button>
+          <button class="stat" data-hl="d"><span class="n">4</span><div><div class="num"><span data-count="2800"></span><small>L/s</small></div><span>distribuye Misicuni a Cochabamba</span></div></button>
+          <button class="stat" data-hl="e"><span class="n">5</span><div><div class="num">70–80<small>%</small></div><span>de humedad: neblina que el bosque capta</span></div></button>
+          <button class="stat" data-hl="f"><span class="n">6</span><div><div class="num">≈<span data-count="3280"></span><small>km²</small></div><span>de Parque Nacional Tunari, KBA BOL32</span></div></button>
+        </div>
+        <div class="fauna rv">
+          <div class="num"><span data-count="10"></span></div>
+          <p>especies amenazadas del Libro Rojo 2026 tienen fichas que citan el PN Tunari. Toca cada silueta.</p>
+          <div class="sil">
+            <button data-note="f-taruka" aria-label="Taruka"><svg viewBox="0 0 84 60"><use href="#s-deer"/></svg></button>
+            <button data-note="f-monterita" aria-label="Monterita cochabambina"><svg viewBox="0 0 64 48"><use href="#s-bird"/></svg></button>
+            <button data-note="f-gato" aria-label="Gato andino"><svg viewBox="0 0 64 60"><use href="#s-cat"/></svg></button>
+            <button data-note="f-jucumari" aria-label="Jucumari"><svg viewBox="0 0 84 60"><use href="#s-bear"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="isoWrap rv">
+        <div class="iso"><svg viewBox="0 0 900 620" id="isoSvg" role="img" aria-label="Bloque ilustrado del territorio de Chiaraje"></svg></div><p class="read rv"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span><b>Cómo leerlo:</b> el bosque (3) capta la neblina (5) y alimenta la laguna y el arroyo (4) que bajan a los valles. Proteger 729 ha de kewiña (1) es cuidar agua y fauna de un parque de ≈3.280 km² (6).</span></p>
+        <img class="condor" src="img/cut/condor_cielo.webp" alt="Cóndor andino en vuelo" data-note="f-condor">
+        <img class="bird" src="img/cut/ave_colaptes.webp" alt="Yaka yaka" style="left:6%;bottom:30%;width:13%">
+        <img class="bird" src="img/cut/ave_phalcoboenus.webp" alt="Alkamari" style="right:6%;bottom:24%;width:8%">
+        <img class="bird" src="img/cut/ave_turdus.webp" alt="Zorzal chiguanco" style="left:36%;bottom:4%;width:13%">
+      </div>
+    </div>
+    <p class="src rv">FAUNAGUA (2026); Kew (2025); Empresa Misicuni (2023); Libro Rojo de los Vertebrados de Bolivia (2026); Arrázola, Mercado y Aguirre (2010). Aves fotografiadas en Chiaraje.</p>
+  </div>
+</section>
+
+<!-- ================= 3 · LA KEWIÑA ================= -->
+<section class="scene dark" id="s3" data-title="La kewiña" data-phase="1">
+  <div class="giant">POLYLEPIS</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <span class="kick rv">El protagonista</span>
+        <h2 class="rv">La kewiña, el bosque que crece donde casi ningún árbol llega</h2>
+        <p class="lede rv">Toca cada parte del árbol para ver sus datos.</p>
+        <div class="spec rv">
+          <div class="mini"><svg><use href="#spiral"/></svg><div><span>Especie de Chiaraje</span><b><i>Polylepis pacensis</i></b></div></div>
+          <div class="mini"><svg><use href="#spiral"/></svg><div><span>Libro rojo y monografía del género</span><b>En Peligro · endémica de Bolivia</b></div></div>
+          <div class="mini"><svg><use href="#spiral"/></svg><div><span>Relictos medidos en Incachaca</span><b>559 a 720 árboles por hectárea</b></div></div>
+        </div>
+      </div>
+      <div class="treebox rv">
+        <div class="shadow"></div>
+        <img class="tr" src="img/t3d/full.webp" alt="Kewiña de corteza rojiza y tronco retorcido">
+        <button class="tpin lft" style="--x:49%;--y:5%" data-note="copa"><span class="d"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span><b>La copa</b></button>
+        <button class="tpin lft" style="--x:33%;--y:22%" data-note="hojas"><span class="d"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span><b>Las hojas y semillas</b></button>
+        <button class="tpin" style="--x:68%;--y:30%" data-note="ramas"><span class="d"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span><b>Las ramas</b></button>
+        <button class="tpin" style="--x:62%;--y:60%" data-note="tronco"><span class="d"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span><b>El tronco y la corteza</b></button>
+        <button class="tpin lft" style="--x:37%;--y:87%" data-note="raices"><span class="d"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span><b>Las raíces</b></button>
+        <button class="tpin" style="--x:60%;--y:95%" data-note="suelo"><span class="d"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span><b>El suelo</b></button>
+      </div>
+    </div>
+    <p class="src rv">Modelo a partir de una fotografía de Vedoble.Ve. FAUNAGUA (2026); Boza y Kessler (2022).</p>
+  </div>
+</section>
+
+<!-- ================= 4 · PROBLEMA Y OPORTUNIDAD ================= -->
+<section class="scene" id="s4" data-title="Problema y oportunidad" data-phase="1">
+  <!-- REEMPLAZAR_FONDO_SLIDE_4 -->
+  <div class="bgp" style="background-image:url(img/bg_gris.jpg)"></div>
+  <div class="giant">URGENCIA</div>
+  <div class="inner">
+    <span class="kick rv">Problema ambiental y oportunidad turística</span>
+    <div class="row">
+      <div class="half">
+        <h3 class="rv">Más del 90% de los bosques de kewiña del Tunari ya desapareció</h3>
+        <div class="ten rv" id="ten" aria-label="De diez bosques, queda menos de uno"></div><p class="read rv"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span>De cada <b>10</b> bosques de kewiña que tuvo el Tunari, hoy queda <b>menos de uno</b>. Lo que sobrevive son relictos entre rocas.</span></p>
+        <div class="causes rv">
+          <button class="cause mat g" data-note="fuego"><span class="emb"><svg viewBox="0 0 48 48"><path d="M24 44c-8 0-13-5-13-12 0-8 7-11 8-19 4 3 6 7 6 11 2-2 3-4 3-7 5 4 8 9 8 15 0 7-5 12-12 12z"/></svg></span><div><b>Fuego</b><div class="num">+430 ha</div><span class="t2">ardieron en el parque en 2025</span></div></button>
+          <button class="cause mat b" data-note="ganado"><span class="emb"><svg viewBox="0 0 48 48"><path d="M10 20c0-4 4-6 8-6h14c5 0 8 3 8 7v6c0 3-2 5-5 5h-1v8h-4v-8H18v8h-4v-9c-2-1-4-3-4-6z"/></svg></span><div><b>Ganado</b><div class="num">5 cm</div><span class="t2">basta para que se coma un brote</span></div></button>
+          <button class="cause mat t" data-note="hacha"><span class="emb"><svg viewBox="0 0 48 48"><path d="M14 40L34 12"/><path d="M28 10c4-2 9 0 11 4l-7 6c-1-4-3-7-4-10z"/></svg></span><div><b>Leña y suelo</b><div class="num">5 de 19</div><span class="t2">árboles sostienen el 63,7% del área basal</span></div></button>
+          <div class="cause mat s"><span class="emb"><svg viewBox="0 0 48 48"><path d="M24 6l9 12h-5l7 9h-5l7 9H11l7-9h-5l7-9h-5z"/><path d="M24 36v8"/></svg></span><div><b>Exóticas</b><div class="num">Pino y eucalipto</div><span class="t2">ocupan el espacio de la kewiña</span></div></div>
+        </div>
+      </div>
+      <div class="half">
+        <h3 class="rv">Seis de cada diez hectáreas pueden volver a ser bosque</h3>
+        <div class="compare rv" id="compare">
+          <!-- REEMPLAZAR_FOTO_SLIDE_4_ANTES -->
+          <img src="img/hero_valle.jpg" alt="Valle de pajonal con kewiñas dispersas" draggable="false">
+          <!-- REEMPLAZAR_FOTO_SLIDE_4_DESPUES -->
+          <img class="after" src="img/bosque_rocas.jpg" alt="Relicto de bosque de kewiña con musgo" draggable="false">
+          <div class="lb l"><b>61,2% pajonal con kewiñas</b>lo que se puede restaurar</div>
+          <div class="lb r"><b>Relicto en buen estado</b>la referencia</div>
+          <div class="bar"></div>
+          <div class="knob" role="slider" tabindex="0" aria-label="Deslizar para comparar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><svg viewBox="0 0 24 24"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></div>
+        </div>
+        <div class="opp rv">
+          <button class="mat l" data-note="o-estado"><div class="num">61,2%</div><span class="t2">de Chiaraje es pajonal con kewiñas sueltas: restaurable</span><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+          <button class="mat g" data-note="o-demanda"><div class="num">3,18 M</div><span class="t2">turistas nacionales viajaron por Bolivia en 2024</span><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+          <button class="mat b" data-note="o-base"><div class="num">Listo</div><span class="t2">Centro Warmi Kewiñas, vivero y línea base</span><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+        </div>
+      </div>
+    </div>
+    <p class="src rv">Plan de Manejo del PN Tunari, citado por Mongabay (2026); FAUNAGUA (2026); Delgado O. (2026); Viceministerio de Turismo (2024).</p>
+  </div>
+</section>
+
+<!-- ================= 5 · LA PROPUESTA ================= -->
+<section class="scene" id="s5" data-title="La propuesta" data-phase="2">
+  <!-- REEMPLAZAR_FONDO_SLIDE_5 -->
+  <div class="bgp" style="background-image:url(img/bg_ladera.jpg)"></div>
+  <div class="giant">PROPUESTA</div>
+  <div class="inner">
+    <span class="kick rv">Objetivo general</span>
+    <h2 class="rv" style="max-width:28ch">Un turismo de naturaleza que paga parte de la restauración del bosque</h2>
+    <p class="goalbox rv">Contribuir a recuperar y conservar los bosques de kewiña del PN Tunari y a diversificar los ingresos de las familias de Chiaraje, con un modelo de <em>liderazgo comunitario</em> que destine parte de sus ingresos al bosque y pueda adaptarse a otras comunidades.</p>
+    <div class="objs rv">
+      <button class="obj mat g" data-note="obj1"><small>Objetivo específico 1 · el bosque</small><h3>Restauración y protección comunitaria</h3><span class="t2">Una acción prioritaria pagada con ingresos turísticos, verificada en campo, y dos parcelas permanentes.</span><div class="num">1 + 2</div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <button class="obj mat b" data-note="obj2"><small>Objetivo específico 2 · las familias</small><h3>Nuevos ingresos y liderazgo de las Warmi Kewiñas</h3><span class="t2">Servicios locales remunerados en al menos dos salidas pagadas por experiencia.</span><div class="num">4 salidas</div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <button class="obj mat s" data-note="obj3"><small>Objetivo específico 3 · el modelo</small><h3>Condiciones para sostener y ampliar</h3><span class="t2">Demanda, punto de equilibrio y reinversión medidos; continuidad acordada; una comunidad vecina evaluada.</span><div class="num">1 vecina</div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+    </div>
+    <div class="now rv">
+      <div><svg viewBox="0 0 48 48"><path d="M6 22L24 8l18 14"/><path d="M10 19v23h28V19"/><path d="M20 42V30h8v12"/></svg><div class="num">10 ago 2026</div><span>se inauguró el Centro Warmi Kewiñas</span></div>
+      <div><svg viewBox="0 0 48 48"><path d="M24 42V22"/><path d="M24 26c-8 0-12-6-12-12 7 0 12 5 12 12zM24 22c0-8 5-12 12-12 0 7-5 12-12 12z"/><path d="M12 42h24"/></svg><div class="num"><span data-count="100000"></span></div><span>plantines al año en el vivero comunal</span></div>
+      <div><svg viewBox="0 0 48 48"><path d="M14 40V24M24 40V16M34 40V28"/><path d="M8 40h32"/></svg><div class="num"><span data-count="119000"></span></div><span>plantines acordados por cinco comunidades</span></div>
+      <div><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path d="M31 17a9 9 0 1 0 0 14M12 21h14M12 27h14"/></svg><div class="num">€95.000</div><span>solicitados a CAF para el piloto, con cierre en 2028</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6 · EL MODELO ================= -->
+<section class="scene" id="s6" data-title="El mecanismo de reinversión" data-phase="2">
+  <!-- REEMPLAZAR_FONDO_SLIDE_6 -->
+  <div class="bgp" style="background-image:url(img/bg_cielo.jpg)"></div>
+  <div class="giant">CICLO</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <span class="kick rv">Mecanismo de reinversión <span class="tour">Turismo</span></span>
+        <h2 class="rv">Cada visita reparte su valor entre las familias y el bosque</h2>
+        <div class="inno rv">
+          <div class="mat t"><span class="emb"><svg viewBox="0 0 48 48"><path d="M8 24h32M30 14l10 10-10 10"/></svg></span><div><b>La tarifa financia acciones verificables</b><span class="t2">desde la recaudación hasta el trabajo en campo</span></div></div>
+          <div class="mat g"><span class="emb"><svg viewBox="0 0 48 48"><circle cx="20" cy="20" r="10"/><path d="M28 28l12 12"/></svg></span><div><b>Ciencia ciudadana en la visita</b><span class="t2">registros de aves y seguimiento fotográfico con protocolos de FAUNAGUA</span></div></div>
+          <div class="mat b"><span class="emb"><svg viewBox="0 0 48 48"><path d="M24 8v32M8 24h32"/></svg></span><div><b>Suma, no duplica</b><span class="t2">añade un ingreso propio a las campañas de plantación en curso</span></div></div>
+        </div>
+        <p class="read rv"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span><b>Cómo leerlo:</b> de cada €100 de tarifa, €55 quedan en las familias, €25 vuelven al bosque (unas 29 kewiñas establecidas) y €20 pagan la venta.</span></p><p class="src rv">Reparto: propuesta inicial, a validar con la comunidad (Anexo 1). FONABOSQUE: Bs 6,50 por plantín establecido.</p>
+      </div>
+      <div class="sankey rv" id="sankey"><svg viewBox="0 0 830 560" id="sankeySvg" role="img" aria-label="Reparto de cada tarifa"></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7 · LA OFERTA TURÍSTICA ================= -->
+<section class="scene" id="s7" data-title="La oferta turística" data-phase="2">
+  <!-- REEMPLAZAR_FONDO_SLIDE_7 -->
+  <div class="bgp" style="background-image:url(img/bg_vuelo.jpg)"></div>
+  <div class="giant">TURISMO</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <span class="kick rv">La oferta turística del piloto <span class="tour">Turismo</span></span>
+        <h2 class="rv">Dos experiencias que solo existen si el bosque sigue en pie</h2>
+        <div class="exps rv">
+          <div class="exp mat g"><small>Experiencia 1 · mercado nacional</small><h3>Naturaleza y restauración</h3><ul><li>Centro Warmi Kewiñas y vivero comunal</li><li>Sectores de bosque elegidos con la comunidad</li><li>Visita interpretativa de la restauración</li></ul></div>
+          <div class="exp mat t"><small>Experiencia 2 · grupos especializados</small><h3>Naturaleza y aviturismo</h3><ul><li>Monterita cochabambina, kewiñero y cóndor</li><li>Guiado especializado y guías locales</li><li>BirdQuest y DOF Travel ya visitan el Tunari</li></ul></div>
+        </div>
+        <div class="cal rv"><h4>Calendario del territorio</h4><svg viewBox="0 0 640 170" id="calSvg" role="img" aria-label="Calendario anual: aves, siembra, semillas, vivero y fiestas"></svg><p class="read rv"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span>Hay algo que ver todo el año: <b>aves de abril a noviembre</b>, siembra con las lluvias y tres fiestas comunales.</span></p></div>
+      </div>
+      <div class="collage rv">
+        <div class="ph" style="left:0;top:0;width:47%;height:42%"><img src="img/laguna_reflejo.jpg" alt="Laguna altoandina"><span>Lagunas</span></div>
+        <div class="ph" style="left:50%;top:3%;width:27%;height:37%"><img src="img/kewina_cascada2.jpg" alt="Cascada con kewiña"><span>Cascadas</span></div>
+        <div class="ph" style="left:80%;top:0;width:20%;height:28%"><img src="img/casas_piedra.jpg" alt="Casas de piedra y nevados" style="object-position:55% 50%"><span>Paisaje</span></div>
+        <div class="ph" style="left:0;top:45%;width:26%;height:32%"><img src="img/arte_rupestre.jpg" alt="Pinturas rupestres"><span>Arte rupestre</span></div>
+        <div class="ph" style="left:29%;top:44%;width:30%;height:25%"><img src="img/rio_incachaca.jpg" alt="Río Incachaca"><span>Río Incachaca</span></div>
+        <div class="ph" data-note="o-restaura" style="left:29%;top:72%;width:30%;height:28%"><img src="img/wk_plantando.jpg" alt="Mujeres de Chiaraje llevan plantines de kewiña a la ladera"><span>Restauración</span></div>
+        <button class="count mat s" data-note="o-atractivos" style="width:26%;bottom:0"><div class="num">13</div><span class="t2" style="font-size:12.5px;display:block">atractivos: 7 naturales, 1 arqueológico y 5 de cultura viva</span></button>
+        <!-- REEMPLAZAR_FOTO_SLIDE_7 -->
+        <img class="person" src="img/cut/visitante_mirador.webp" alt="Visitante contemplando el paisaje">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 8 · CÓMO SE LLEGA ================= -->
+<section class="scene" id="s8" data-title="Cómo se llega" data-phase="2">
+  <!-- REEMPLAZAR_FONDO_SLIDE_8 -->
+  <div class="bgp" style="background-image:url(img/kewina_arbol.jpg);opacity:.35"></div>
+  <div class="giant">RUTA</div>
+  <div class="inner">
+    <span class="kick rv">Accesibilidad del destino <span class="tour">Turismo</span></span>
+    <h2 class="rv" style="max-width:34ch">Del aeropuerto de Cochabamba a Chiaraje en 3 a 5 horas</h2>
+    <div class="road rv" id="road" style="margin-top:14px"><svg viewBox="0 0 1200 430" id="roadSvg" role="img" aria-label="Perfil del camino; arrastra el vehículo"></svg></div>
+    <div class="roadrow">
+      <div class="clock rv"><div class="num" id="clk">0 h 00</div><div class="seg" id="seg"></div></div>
+      <div class="rv">
+        <div class="access">
+          <div class="mat t"><div class="num">124–150</div><span class="t2">km por carretera</span></div>
+          <div class="mat g"><div class="num">Diario</div><span class="t2">transporte por vía regular</span></div>
+          <div class="mat b"><div class="num">3.900 m</div><span class="t2">el Centro, a la llegada</span></div>
+        </div>
+        <div class="lg" style="margin-top:12px"><span><i style="border-color:#f1f2ec"></i>pavimento</span><span><i style="border-color:#b8b2a2;border-top-style:dashed"></i>empedrado</span><span><i style="border-color:#e0bc68;border-top-style:dotted"></i>ripio</span><span>Arrastra el vehículo o usa ← →.</span></div><p class="read rv"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span>La cumbre, a unos <b>4.500 m</b>, es el punto más alto del viaje; desde Peñas se baja por la vertiente norte hasta el Centro, a <b>3.900 m</b>.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 9 · ACTIVIDADES ================= -->
+<section class="scene" id="s9" data-title="Las seis actividades" data-phase="2">
+  <!-- REEMPLAZAR_FONDO_SLIDE_9 -->
+  <div class="bgp" style="background-image:url(img/bg_ladera2.jpg)"></div>
+  <div class="giant">PASOS</div>
+  <div class="inner">
+    <span class="kick rv">Actividades financiadas por CAF</span>
+    <div class="h2row"><h2 class="rv">Seis actividades, del diseño a la decisión</h2><div class="budget rv" id="budget"></div></div>
+    <div class="phases rv"><div>Diseño y preparación</div><div>Operación</div><div>Decisión</div></div>
+    <div class="steps rv">
+      <div class="st6 mat t"><span class="emb"><svg viewBox="0 0 56 56"><path d="M8 46l12-30 10 18 6-10 12 22z"/><circle cx="40" cy="12" r="4"/></svg></span><div class="k">1</div><h3>Diseñar los circuitos</h3><dl><dt>Qué se hace</dt><dd>Evaluar atractivos, acceso y sensibilidad ambiental con la comunidad.</dd><dt>Resultado</dt><dd>Dos circuitos con recorridos, cupos y reglas.</dd></dl><span class="who">HOWWE</span><span class="who">Warmi Kewiñas</span></div>
+      <div class="st6 mat g"><span class="emb"><svg viewBox="0 0 56 56"><path d="M8 26L28 10l20 16"/><path d="M13 22v24h30V22"/><path d="M24 46V34h8v12"/></svg></span><div class="k">2</div><h3>Adecuar el Centro</h3><dl><dt>Qué se hace</dt><dd>Mejoras de bajo impacto; evaluar energía renovable.</dd><dt>Resultado</dt><dd>Centro listo para orientar e interpretar.</dd></dl><span class="who">FAUNAGUA</span></div>
+      <div class="st6 mat b"><span class="emb"><svg viewBox="0 0 56 56"><circle cx="18" cy="16" r="6"/><circle cx="38" cy="16" r="6"/><path d="M6 44c0-9 5-14 12-14s12 5 12 14M26 44c0-9 5-14 12-14s12 5 12 14"/></svg></span><div class="k">3</div><h3>Preparar a los prestadores</h3><dl><dt>Qué se hace</dt><dd>Acordar servicios y pagos; formar en guiado e interpretación.</dd><dt>Resultado</dt><dd>Prestadores formados y materiales.</dd></dl><span class="who">Warmi Kewiñas</span></div>
+      <div class="st6 mat t"><span class="emb"><svg viewBox="0 0 56 56"><path d="M6 36h40l4-8-6-8H16l-6 8z"/><circle cx="16" cy="40" r="5"/><circle cx="40" cy="40" r="5"/></svg></span><div class="k">4</div><h3>Operar las salidas</h3><dl><dt>Qué se hace</dt><dd>Costear, promocionar y operar; registrar costos y pagos.</dd><dt>Resultado</dt><dd>4 salidas pagadas y punto de equilibrio.</dd></dl><span class="who">HOWWE</span></div>
+      <div class="st6 mat g hi"><span class="rtag">Reforestación</span><span class="emb"><svg viewBox="0 0 56 56"><path d="M28 48V24"/><path d="M28 30c-9 0-14-6-14-13 8 0 14 5 14 13zM28 26c0-9 6-14 14-14 0 8-6 14-14 14z"/><path d="M10 48h36"/></svg></span><div class="k">5</div><h3>Reinvertir en el bosque y monitorear</h3><dl><dt>Qué se hace</dt><dd>Aplicar el aporte al cuidado de plantaciones o relictos; seguir 2 parcelas.</dd><dt>Resultado</dt><dd>Un ciclo de reinversión verificado.</dd></dl><span class="who">FAUNAGUA</span></div>
+      <div class="st6 mat s"><span class="emb"><svg viewBox="0 0 56 56"><path d="M8 44V28l12-10 12 10v16z"/><path d="M32 44V30l8-7 8 7v14"/></svg></span><div class="k">6</div><h3>Continuidad y réplica</h3><dl><dt>Qué se hace</dt><dd>Acordar con Chiaraje qué continúa; evaluar con una vecina.</dd><dt>Resultado</dt><dd>Decisión de continuidad e Icari evaluada.</dd></dl><span class="who">Todos</span></div>
+    </div>
+    <div class="refo rv">
+      <div><span class="tag">Reforestación</span><h3>El hilo verde del piloto</h3></div>
+      <ol>
+        <li><svg viewBox="0 0 48 48"><path d="M6 40h36"/><path d="M10 40V24l14-10 14 10v16"/><path d="M24 40V30"/><path d="M24 32c-4 0-6-3-6-6 4 0 6 2 6 6zM24 30c0-4 2-6 6-6 0 4-2 6-6 6z"/></svg><b>100.000</b><span>plantines al año en el vivero de las Warmi Kewiñas</span></li>
+        <li><svg viewBox="0 0 48 48"><path d="M24 42V22"/><path d="M24 26c-8 0-12-6-12-12 7 0 12 5 12 12zM24 22c0-8 5-12 12-12 0 7-5 12-12 12z"/><path d="M12 42h24"/></svg><b>119.000</b><span>plantines acordados por 5 comunidades, 2026–2027</span></li>
+        <li><svg viewBox="0 0 48 48"><path d="M14 26a8 8 0 0 1 2-15.7A10 10 0 0 1 35 13a7 7 0 0 1-1 13z"/><path d="M16 32l-2 6M24 32l-2 6M32 32l-2 6"/></svg><b>Dic–feb</b><span>siembra con las lluvias</span></li>
+        <li class="hl"><svg viewBox="0 0 48 48"><path d="M24 6l14 6v10c0 9-6 16-14 20-8-4-14-11-14-20V12z"/><path d="M24 34V22"/><path d="M24 26c-4 0-6-3-6-6 4 0 6 2 6 6zM24 24c0-4 2-6 6-6 0 4-2 6-6 6z"/></svg><b>Actividad 5</b><span>el aporte turístico paga el cuidado de lo plantado</span></li>
+        <li><svg viewBox="0 0 48 48"><circle cx="21" cy="21" r="11"/><path d="M29 29l11 11"/><path d="M21 26v-8M17 22l4-4 4 4"/></svg><b>2 parcelas</b><span>verifican si el bosque se recupera</span></li>
+      </ol>
+      <div class="tot"><div class="num">+<span data-count="467000"></span></div><span>kewiñas plantadas desde 2022 por FAUNAGUA y Acción Andina</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10 · RESULTADOS 2028 ================= -->
+<section class="scene" id="s10" data-title="Resultados al 2028" data-phase="2">
+  <!-- REEMPLAZAR_FONDO_SLIDE_10 -->
+  <div class="bgp" style="background-image:url(img/bg_follaje.jpg);opacity:.3"></div>
+  <div class="giant">2028</div>
+  <div class="inner">
+    <span class="kick rv">Resultados esperados al cierre del piloto, 2028</span>
+    <h2 class="rv" style="max-width:30ch">Seis resultados que se pueden contar y verificar</h2>
+    <div class="res rv">
+      <button class="re mat g" data-note="r-salidas"><div class="num">4</div><div><svg class="ric" viewBox="0 0 48 48"><path d="M6 34h36l-3-9-5-6H14l-5 6z"/><circle cx="14" cy="36" r="4"/><circle cx="34" cy="36" r="4"/></svg><h4>Salidas pagadas</h4><span class="t2">2 por experiencia, con costos reales y punto de equilibrio</span></div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <div class="re mat b"><div class="num">100%</div><div><svg class="ric" viewBox="0 0 48 48"><circle cx="18" cy="14" r="6"/><circle cx="32" cy="16" r="5"/><path d="M6 40c0-9 5-14 12-14s12 5 12 14M28 40c0-7 3-11 8-11s8 4 8 11"/></svg><h4>Ingresos registrados</h4><span class="t2">por hogar, con participación de mujeres y jóvenes</span></div></div>
+      <button class="re mat t" data-note="r-ciclo"><div class="num">1</div><div><svg class="ric" viewBox="0 0 48 48"><path d="M38 18a16 16 0 0 0-28 2M10 30a16 16 0 0 0 28-2"/><path d="M38 10v8h-8M10 38v-8h8"/></svg><h4>Ciclo de reinversión</h4><span class="t2">monto recaudado, aplicado y acción verificada</span></div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <div class="re mat s"><div class="num">1+</div><div><svg class="ric" viewBox="0 0 48 48"><path d="M24 42V22"/><path d="M24 26c-8 0-12-6-12-12 7 0 12 5 12 12zM24 22c0-8 5-12 12-12 0 7-5 12-12 12z"/><path d="M8 42h32"/></svg><h4>Acción de conservación</h4><span class="t2">cuidado de plantaciones, protección de relictos o brigadas contra incendios</span></div></div>
+      <button class="re mat g" data-note="r-parcelas"><div class="num">2</div><div><svg class="ric" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="3" stroke-dasharray="4 3"/><circle cx="18" cy="20" r="3"/><circle cx="30" cy="18" r="3"/><circle cx="24" cy="31" r="3"/></svg><h4>Parcelas permanentes</h4><span class="t2">regeneración natural y condición del bosque</span></div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <div class="re mat b"><div class="num">1</div><div><svg class="ric" viewBox="0 0 48 48"><path d="M4 40V26l10-8 10 8v14z"/><path d="M24 40V28l10-8 10 8v12"/></svg><h4>Comunidad vecina</h4><span class="t2">evaluada para sumarse; Icari primero</span></div></div>
+    </div>
+    <p class="read rv"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span>Todo se mide con los <b>registros de cada salida</b> y con las <b>parcelas en campo</b>: al cierre se sabrá con datos reales si el modelo funciona.</span></p><p class="src rv">Nota conceptual, sección 4. «100%» indica que todos los ingresos de las salidas se registran por hogar.</p>
+  </div>
+</section>
+
+<!-- ================= 11 · WARMI KEWIÑAS ================= -->
+<section class="scene" id="s11" data-title="Warmi Kewiñas" data-phase="3">
+  <!-- REEMPLAZAR_FONDO_SLIDE_11 -->
+  <div class="bgp" style="background-image:url(img/bosque_interior.jpg)"></div>
+  <div class="giant">WARMI</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <span class="kick rv">El corazón del proyecto</span>
+        <h2 class="rv">Las Warmi Kewiñas lideran el componente comunitario</h2>
+        <p class="lede rv">25 mujeres de Chiaraje, de 18 a 68 años, organizadas desde octubre de 2022 para cuidar los bosques de kewiña. Producen plantines y reforestan; en el piloto orientan el diseño de las visitas y deciden cómo se reparten los beneficios y a dónde va el aporte al bosque.</p>
+        <div class="wstats rv">
+          <button class="wstat mat g" data-note="w-org"><div class="num">10 → 25</div><span class="t2">integrantes desde 2022, con directiva propia</span><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+          <button class="wstat mat b" data-note="w-vivero"><div class="num"><span data-count="100000"></span></div><span class="t2">plantines al año en el vivero comunal</span><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+          <button class="wstat mat s" data-note="w-decide"><div class="num">4</div><span class="t2">decisiones clave en sus manos</span><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+        </div>
+        <div class="rv" style="margin-top:22px"><h4 style="font-size:17px;font-weight:600">Su papel en las seis actividades</h4>
+          <div class="wline"><div><i>1</i>diseño de circuitos</div><div><i>2</i>uso del Centro</div><div class="lead"><i>3</i>lideran la preparación</div><div><i>4</i>servicios locales</div><div><i>5</i>eligen la acción</div><div><i>6</i>deciden la continuidad</div></div>
+        </div>
+        <div class="pot rv"><h4>Lo que pueden ofrecer al visitante</h4><ul><li><svg viewBox="0 0 24 24"><path d="M4 11h16c0 5-4 8-8 8s-8-3-8-8z"/><path d="M9 7c0-2 2-2 2-4M14 7c0-2 2-2 2-4"/></svg>Gastronomía tradicional</li><li><svg viewBox="0 0 24 24"><path d="M5 13c0-4 3-7 7-7s7 3 7 7v3H5z"/><path d="M9 10v3M12 9v4M15 10v3"/></svg>Panificación</li><li><svg viewBox="0 0 24 24"><path d="M4 20l8-16 8 16z"/><path d="M8 13h8M6 17h12"/></svg>Artesanías</li><li><svg viewBox="0 0 24 24"><path d="M7 4h10l-1 16H8z"/><path d="M7 9h10"/></svg>Transformación de materias primas</li></ul></div>
+      </div>
+      <div class="warmi rv">
+        <div class="ph" style="left:0;top:0;width:62%;height:50%"><img src="img/wk_vivero_sonrisa.jpg" alt="Dos integrantes de las Warmi Kewiñas con plantines de kewiña en el vivero"><span>Vivero comunal</span></div>
+        <div class="ph" style="left:65%;top:5%;width:35%;height:33%"><img src="img/wk_marcha.jpg" alt="Las Warmi Kewiñas caminan con su estandarte" style="object-position:30% 50%"><span>Desde 2022</span></div>
+        <div class="ph" style="left:0;top:54%;width:40%;height:36%"><img src="img/wk_alfabetizacion.jpg" alt="Integrantes en una sesión de alfabetización"><span>Alfabetización</span></div>
+        <div class="ph" data-note="w-centro" style="left:43%;top:62%;width:57%;height:38%"><img src="img/wk_centro.jpg" alt="Las Warmi Kewiñas en su Centro Integral Ecoturístico"><span>Su Centro</span></div>
+        <div class="badge20 mat l"><small style="font-size:13px;font-weight:700;color:#2e5a35">Octubre 2022 → hoy</small><div class="num">25</div><span class="t2" style="font-size:15px">mujeres de 18 a 68 años</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 12 · ALIANZA ================= -->
+<section class="scene" id="s12" data-title="La alianza" data-phase="3">
+  <!-- REEMPLAZAR_FONDO_SLIDE_12 -->
+  <div class="bgp" style="background-image:url(img/bg_corteza.jpg);opacity:.28"></div>
+  <div class="giant">ALIANZA</div>
+  <div class="inner">
+    <span class="kick rv">Capacidad de ejecución</span>
+    <h2 class="rv" style="max-width:30ch">Una alianza que ya trabaja en el territorio</h2>
+    <div class="team">
+      <div class="tm mat l rv"><div class="im"><img class="cutimg" src="img/cut/medicion.webp" alt="Técnico midiendo una kewiña"></div><div class="bd"><small>Entidad líder · responde ante CAF</small><h3>FAUNAGUA</h3><div class="num">+<span data-count="467000"></span></div><span class="t2">kewiñas plantadas desde 2022 con Acción Andina; autor del Plan de Manejo del PN Tunari</span></div></div>
+      <div class="tm mat t rv"><div class="im"><img src="img/campamento.jpg" alt="Visitante en una pampa de altura"></div><div class="bd"><small>Aliado técnico y operativo</small><h3>HOWWE</h3><div class="num">2</div><span class="t2">experiencias a diseñar, costear, vender y operar; cartera internacional</span></div></div>
+      <button class="tm mat b rv" data-note="comunidades"><div class="im"><img src="img/wk_asamblea.jpg" alt="Asamblea comunal frente al Centro Warmi Kewiñas"></div><div class="bd"><small>Comunidades del paisaje</small><h3>Cinco actas</h3><div class="num"><span data-count="119000"></span></div><span class="t2">plantines acordados para la campaña 2026–2027</span></div><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+    </div>
+    <div class="gov rv">
+      <div><b>GAM de Cocapata</b><span>Convenio de 4 años (2025); aportó el 63,7% del Centro</span></div>
+      <div><b>Acción Andina</b><span>+467.000 kewiñas plantadas con FAUNAGUA desde 2022</span></div>
+      <div><b>PN Tunari</b><span>Zona Z-5: su plan de manejo admite turismo comunitario</span></div>
+      <div><b>Autoridades de Chiaraje</b><span>Definen sitios, cupos y quién administra el aporte</span></div>
+      <button data-note="g-roles"><b>Quién hace qué</b><span>Roles de cada socio</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 13 · GARANTÍAS ================= -->
+<section class="scene" id="s13" data-title="Cómo se garantiza" data-phase="4">
+  <!-- REEMPLAZAR_FONDO_SLIDE_13 -->
+  <div class="bgp" style="background-image:url(img/bg_niebla.jpg)"></div>
+  <div class="giant">GARANTÍA</div>
+  <div class="inner">
+    <span class="kick rv">Cómo se garantiza</span>
+    <h2 class="rv" style="max-width:30ch">Verificación, riesgos controlados y una base que ya existe</h2>
+    <div class="guar rv">
+      <button class="gq mat t" data-note="q-verif"><header><span class="emb"><svg viewBox="0 0 48 48"><path d="M10 24l9 9 19-19"/></svg></span><h3>Verificación y rendición de cuentas</h3></header><ul><li>Cada salida separa pagos a prestadores y aporte al bosque</li><li>Informes a la comunidad: pagos, monto reservado y acciones</li><li>2 parcelas y ciencia ciudadana con protocolos de FAUNAGUA</li></ul><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <button class="gq mat b" data-note="q-riesgos"><header><span class="emb"><svg viewBox="0 0 48 48"><path d="M24 6l18 32H6z"/><path d="M24 20v8M24 33v1"/></svg></span><h3>Cinco riesgos, con medidas</h3></header><ul><li><b>Relictos y fauna:</b> grupos pequeños, trazados que evitan zonas frágiles</li><li><b>Fuego y clima:</b> sin fogatas, alertas con brigadas, criterios de suspensión</li><li><b>Beneficios y cuidados:</b> reglas con las Warmi Kewiñas y sala cuna</li></ul><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <button class="gq mat g" data-note="q-cofin"><header><span class="emb"><svg viewBox="0 0 48 48"><path d="M8 22L24 9l16 13"/><path d="M12 19v21h24V19"/></svg></span><h3>Cofinanciamiento documentado</h3></header><ul><li><b>Bs 249.237</b> en el Centro ya construido (GAM y FAUNAGUA)</li><li><b>+467.000</b> kewiñas plantadas con Acción Andina</li><li>Vivero en producción, técnicos municipales y transporte</li></ul><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+      <button class="gq mat s" data-note="q-sost"><header><span class="emb"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><path d="M24 14v10l7 5"/></svg></span><h3>Sostenibilidad y permisos</h3></header><ul><li>Salidas regulares solo si la demanda pagada cubre la operación</li><li>Antes del cierre se acuerda quién gestiona reservas, Centro y aporte</li><li>Compatibilidad con el PN Tunari (zona Z-5), nota por gestionar</li></ul><span class="dots"><svg viewBox="0 0 16 16"><use href="#dotsI"/></svg></span></button>
+    </div>
+    <p class="src rv">Nota conceptual, secciones 5 a 9.</p>
+  </div>
+</section>
+
+<!-- ================= 14 · ESCALA Y CIERRE ================= -->
+<section class="scene" id="s14" data-title="Escala y cierre" data-phase="4">
+  <!-- REEMPLAZAR_FONDO_SLIDE_14 -->
+  <div class="bgp" style="background-image:url(img/atardecer_quebrada.jpg);opacity:.5"></div>
+  <div class="giant">LEGADO</div>
+  <div class="inner">
+    <div class="row">
+      <div>
+        <div class="mapwrap rv"><img src="img/mapa_reforestacion.jpg" alt="Mapa de Chiaraje, Icari y Kumara y el límite del PN Tunari"><svg viewBox="0 0 1512 836" id="ringsMap" preserveAspectRatio="none"></svg></div>
+        <div class="rl5 rv"><button data-hl="r1">1 · Chiaraje</button><button data-hl="r2">2 · Icari</button><button data-hl="r3">3 · Subcentral Kumara</button><button data-hl="r4">4 · PN Tunari</button><button data-hl="r5">5 · Andes de Bolivia</button></div>
+        <div class="ringtxt rv" id="ringTxt"><b>Chiaraje, el piloto</b>Dos experiencias, al menos cuatro salidas pagadas y un ciclo de reinversión verificado.</div><p class="src rv">Mapa SIG del proyecto (2026): OpenStreetMap, límites de áreas protegidas y Esri. Pasa o toca cada escala.</p>
+      </div>
+      <div>
+        <span class="kick rv">Escalabilidad y legado</span>
+        <h2 class="rv">Que el bosque que siembra agua tenga quien lo cuide, y quien lo pague</h2>
+        <ul class="commit rv">
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Dos experiencias de turismo de naturaleza probadas con salidas pagadas</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Un primer ciclo de reinversión en el bosque, verificado en campo</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Ingresos para las familias, con las Warmi Kewiñas al frente</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Un modelo listo para Icari, el Tunari y los Andes de Bolivia</li>
+        </ul>
+        <div class="ask rv">Inversión solicitada a CAF <b>€95.000</b></div>
+        <div class="signs rv"><div><b>Asociación FAUNAGUA</b>entidad líder</div><div><b>HOWWE S.R.L.</b>aliado técnico y operativo</div><div><b>Warmi Kewiñas</b>Chiaraje, Cocapata</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="panel" id="panel" role="dialog" aria-labelledby="panelT"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+(function(){
+'use strict';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const G=window.gsap&&!RM?window.gsap:null;
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(v,d=0)=>v.toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d,useGrouping:true});
+const tree=(x,y,h,c='',d=0)=>{const a=/^[a-z]+$/.test(c)?`class="${c}" style="animation-delay:${d}s"`:c;return `<use href="#kw" x="${(x-h*.333).toFixed(1)}" y="${(y-h).toFixed(1)}" width="${(h*.667).toFixed(1)}" height="${h.toFixed(1)}" ${a}/>`};
+const svg=(w,h,inner,label)=>`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${label||''}">${inner}</svg>`;
+const X='<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function lit(el){const sc=el.closest('.scene');if(!sc)return;const k=el.dataset.hl;$$('[data-hl]',sc).forEach(x=>x.classList.toggle('lit',x.dataset.hl===k));$$('.hlbox',sc).forEach(b=>b.classList.add('hl-on'))}
+document.addEventListener('pointerover',e=>{const t=e.target.closest&&e.target.closest('[data-hl]');if(t)lit(t)});
+
+const D={
+ altura:{t:'Una kewiña al lado de una persona y una casa',vis(){
+   const base=270,s=21; // px por metro
+   const ax=[0,2,4,6,8,10,12].map(m=>`<line x1="40" x2="620" y1="${base-m*s}" y2="${base-m*s}" stroke="rgba(22,20,15,.08)"/><text class="t-s" x="34" y="${base-m*s+4}" text-anchor="end">${m} m</text>`).join('');
+   return svg(640,320,`${ax}
+   <line x1="40" x2="620" y1="${base}" y2="${base}" stroke="rgba(22,20,15,.4)"/>
+   <use href="#person" x="88" y="${base-1.7*s}" width="${1.7*s/3}" height="${1.7*s}" style="color:#16140f" class="growy"/>
+   <text class="t-s" x="94" y="${base+20}" text-anchor="middle">persona, 1,7 m</text>
+   <g class="growy" style="animation-delay:.1s"><rect x="160" y="${base-6*s+30}" width="100" height="${6*s-30}" fill="none" stroke="#16140f" stroke-width="1.4"/><path d="M152 ${base-6*s+30}L210 ${base-6*s}L268 ${base-6*s+30}" fill="none" stroke="#16140f" stroke-width="1.4"/><line x1="160" x2="260" y1="${base-3*s}" y2="${base-3*s}" stroke="#16140f" stroke-width="1"/></g>
+   <text class="t-s" x="210" y="${base+20}" text-anchor="middle">casa de dos pisos</text>
+   ${tree(370,base,6.1*s*1.05,'growy',.2)}<text class="t-m" x="370" y="${base+20}" text-anchor="middle">6,1 m</text><text class="t-s" x="370" y="${base+36}" text-anchor="middle">altura media</text>
+   ${tree(520,base,11*s*1.03,'growy',.35)}<text class="t-m" x="520" y="${base+20}" text-anchor="middle">11 m</text><text class="t-s" x="520" y="${base+36}" text-anchor="middle">el más alto medido</text>`,'Comparación de alturas')},
+   p:'En el Área 1 la altura media es de 6,1 m, con un máximo de 11 m; en el Área 2, de 5,3 m con un máximo de 8 m. Todo esto a más de 3.500 m de altitud.',s:'FAUNAGUA (2026), caracterización de bosques de P. pacensis en Chiaraje.'},
+ densidad:{t:'Un árbol cada 14 a 18 m², como una habitación',vis(){
+   const sq=(x,n,lab,sub)=>{let t='';const pts=[[.2,.25],[.7,.2],[.45,.5],[.15,.75],[.8,.6],[.55,.85],[.3,.45]];for(let i=0;i<n;i++)t+=tree(x+pts[i][0]*220,40+pts[i][1]*220+20,40,'pop',i*.08);return `<rect x="${x}" y="40" width="220" height="220" fill="rgba(205,166,90,.12)" stroke="#16140f" stroke-dasharray="4 4"/>${t}<text class="t-m" x="${x}" y="290">${lab}</text><text class="t-s" x="${x}" y="308">${sub}</text>`};
+   return svg(560,320,`<text class="t-s" x="20" y="22">Cada cuadro = 10 × 10 m (100 m²)</text>${sq(20,7,'720 árboles/ha','≈7 árboles en 100 m²')}${sq(320,6,'559 árboles/ha','≈6 árboles en 100 m²')}`,'Densidad de árboles')},
+   p:'Los dos relictos medidos tienen entre 558,8 y 720 árboles por hectárea. En el Área 1 hay 43,5 m²/ha de área basal y 357,6 m³/ha de volumen (23,5 y 131,2 en el Área 2).',s:'FAUNAGUA (2026).'},
+ cinco:{t:'Cinco árboles sostienen el bosque',vis(){
+   let t='';for(let i=0;i<19;i++){const big=[2,6,9,13,16].includes(i);t+=tree(30+i*28+(big?0:0),big?130:130,big?78:44,'pop',i*.04);if(big)t+=`<circle cx="${30+i*28}" cy="140" r="4" fill="#9a5b34" class="pop" style="animation-delay:${.8+i*.03}s"/>`}
+   const bar=(y,v,l)=>`<text class="t-s" x="20" y="${y-8}">${l}</text><rect x="20" y="${y}" width="520" height="16" fill="rgba(22,20,15,.08)"/><rect class="grow" x="20" y="${y}" width="${520*v/100}" height="16" fill="#9a5b34"/><text class="t-m" x="${26+520*v/100}" y="${y+13}">${fmt(v,1)}%</text>`;
+   return svg(580,260,`${t}<line x1="10" x2="560" y1="132" y2="132" stroke="rgba(22,20,15,.3)"/>${bar(180,63.7,'Área basal en manos de 5 de los 19 árboles')}${bar(228,75.6,'Volumen de madera en manos de esos 5 árboles')}`,'Cinco de 19 árboles concentran el área basal')},
+   p:'En el Área 1, 5 de 19 árboles concentran el 63,7% del área basal y el 75,6% del volumen. Si se pierden esos ejemplares, el dosel colapsa. Hay muchos fustes delgados y muy pocos gruesos.',s:'FAUNAGUA (2026). Árboles grandes resaltados de forma ilustrativa.'},
+ amenazadas:{t:'Especies amenazadas ligadas a este bosque',vis(){
+   const R=[['en','EN','Kewiña · Polylepis pacensis','Endémica de Bolivia, del sur de La Paz y el oeste de Cochabamba (Boza y Kessler, 2022).'],['en','EN','Monterita de Cochabamba · Poospiza garleppi','Endémica; registrada en el PN Tunari. BirdQuest y DOF Travel llevan grupos a fotografiarla.'],['en','EN','Pájaro kewiñero · Conirostrum binghami','Especialista de la kewiña; registrado en el PN Tunari.'],['vu','VU','Cóndor andino · Vultur gryphus','El Libro Rojo incluye al PN Tunari entre sus áreas.'],['q','VU','Jucumari · Tremarctos ornatus','Presente en la vecina Incacasani–Altamachi; en Chiaraje, por confirmar.']];
+   return `<div class="rows">${R.map(r=>`<div><span class="badge ${r[0]}">${r[1]}</span><div><b>${r[2]}</b><span>${r[3]}</span></div></div>`).join('')}</div>`},
+   p:'EN: En Peligro. VU: Vulnerable. El piloto sumará registros de aves en cada salida, como ciencia ciudadana.',s:'Libro Rojo de los Vertebrados de Bolivia (2026); Boza y Kessler (2022).'},
+ vivero:{t:'De la semilla al vivero comunal',vis(){
+   const ring=(cx,v,l)=>{const r=58,L=2*Math.PI*r;return `<circle cx="${cx}" cy="80" r="${r}" fill="none" stroke="rgba(22,20,15,.1)" stroke-width="12"/><circle cx="${cx}" cy="80" r="${r}" fill="none" stroke="#4f7340" stroke-width="12" stroke-dasharray="${L}" stroke-dashoffset="${L*(1-v/100)}" transform="rotate(-90 ${cx} 80)" style="transition:stroke-dashoffset 1.2s"/><text class="t-b" x="${cx}" y="92" text-anchor="middle">${v}%</text><text class="t-s" x="${cx}" y="164" text-anchor="middle">${l}</text>`};
+   let sp='';for(let i=0;i<20;i++)sp+=`<use href="#sprout" x="${300+(i%10)*26}" y="${36+Math.floor(i/10)*44}" width="20" height="24" class="pop" style="animation-delay:${i*.04}s"/>`;
+   return svg(580,190,`${ring(80,84,'árboles con fruto, Área 1')}${ring(220,83,'Área 2')}${sp}<text class="t-m" x="300" y="150">100.000 plantines al año</text><text class="t-s" x="300" y="168">capacidad del vivero de Chiaraje (3.400 m)</text>`,'Fructificación y vivero')},
+   p:'En enero de 2026, el 84% de los árboles del Área 1 y el 83% del Área 2 tenían fruto: hay semilla local. El vivero comunal de Chiaraje, a 3.400 m, puede producir 100.000 plantines al año; otro vivero opera en Kumara, a 3.900 m.',s:'FAUNAGUA (2026).'},
+ clima:{t:'El clima que soporta',vis(){
+   const x=v=>40+(v+10)*18; // −10 a 20 °C
+   let ticks='';for(let v=-10;v<=20;v+=5)ticks+=`<line x1="${x(v)}" x2="${x(v)}" y1="70" y2="76" stroke="#16140f"/><text class="t-s" x="${x(v)}" y="92" text-anchor="middle">${v} °C</text>`;
+   return svg(600,250,`<line x1="${x(-10)}" x2="${x(20)}" y1="70" y2="70" stroke="#16140f"/>${ticks}
+   <rect class="grow" x="${x(10)}" y="46" width="${x(18)-x(10)}" height="18" fill="#cda65a"/><text class="t-m" x="${x(14)}" y="38" text-anchor="middle">10–18 °C, temperatura de referencia</text>
+   <circle class="pop" cx="${x(-8)}" cy="55" r="9" fill="#4a7088"/><text class="t-m" x="${x(-8)}" y="38" text-anchor="middle">−8 °C</text><text class="t-s" x="${x(-8)+14}" y="118">mínimas de invierno</text>
+   <circle class="pop" cx="${x(-4)}" cy="55" r="6" fill="#4a7088" opacity=".6" style="animation-delay:.2s"/><text class="t-s" x="${x(-4)+14}" y="136">−4 °C: heladas en el vivero, junio–agosto</text>
+   <text class="t-s" x="40" y="180">Lluvia anual</text><rect x="40" y="190" width="520" height="14" fill="rgba(22,20,15,.08)"/><rect class="grow" x="${40+800/1500*520}" y="190" width="${400/1500*520}" height="14" fill="#4a7088"/><text class="t-m" x="${40+800/1500*520}" y="226">800–1.200 mm al año</text><text class="t-s" x="40" y="226">0</text><text class="t-s" x="560" y="226" text-anchor="end">1.500 mm</text>`,'Temperaturas y lluvia')},
+   p:'Humedad del 70–80% y vientos de 5–10 km/h. La estación Viscachas–Chiaraje registró en 2025 mínimas de hasta −8 °C.',s:'FAUNAGUA (2026); plan turístico FAUNAGUA–HOWWE.'},
+ misicuni:{t:'El caudal que se está perdiendo',vis(){
+   const b=(y,v,l,c)=>`<text class="t-s" x="20" y="${y-8}">${l}</text><rect class="grow" x="20" y="${y}" width="${v/3100*500}" height="34" fill="${c}"/><text class="t-b" x="${30+v/3100*500}" y="${y+28}" style="font-size:28px">${fmt(v)} L/s</text>`;
+   return svg(620,200,`${b(40,3100,'Antes','#9fb7c4')}${b(120,2800,'Hoy, según Empresa Misicuni (2023)','#4a7088')}<rect x="${20+2800/3100*500}" y="120" width="${300/3100*500}" height="34" fill="none" stroke="#9a5b34" stroke-dasharray="3 3"/><text class="t-s t-c" x="${20+2800/3100*500}" y="180">−300 L/s por el cambio climático</text>`,'Caudal de Misicuni')},
+   p:'2.800 litros por segundo equivalen a unos 242 millones de litros al día para la región metropolitana de Cochabamba. Los bosques de kewiña de la cabecera retienen agua y regulan su paso hacia los ríos.',s:'Empresa Misicuni (2023). Litros por día: cálculo propio.'},
+ sanidad:{t:'Señales de salud que se vigilan',vis(){
+   const R=[['Ramas muertas',5,6],['Hongos en ramas',3,13],['Insectos xilófagos',1,1],['Pústulas globosas',1,0],['Hemiparásita Tristerix penduliflorus',1,1]];
+   const dots=(n,x,y,c)=>{let t='';for(let i=0;i<n;i++)t+=`<circle class="pop" cx="${x+i*14}" cy="${y}" r="5" fill="${c}" style="animation-delay:${i*.04}s"/>`;return t};
+   return svg(600,40+R.length*44,`<text class="t-s" x="250" y="20">Área 1</text><text class="t-s" x="420" y="20">Área 2</text>${R.map((r,i)=>`<text class="t-m" x="0" y="${56+i*44}" style="font-size:13px">${r[0]}</text>${dots(r[1],250,52+i*44,'#cda65a')}${dots(r[2],420,52+i*44,'#9a5b34')}<line x1="0" x2="600" y1="${70+i*44}" y2="${70+i*44}" stroke="rgba(22,20,15,.08)"/>`).join('')}`,'Registros de sanidad por área')},
+   p:'El Área 2 está más estresada: 20% de árboles en mal estado, 10% muertos y 13 registros de hongos. También hay moluscos abundantes en Incachaca, incluso en ramas.',s:'FAUNAGUA (2026). Cada punto es un registro.'},
+ esponja:{t:'Pesar un litro de suelo',vis(){
+   let w='';for(let i=0;i<14;i++)w+=`<circle class="pop" cx="${120+(i%4)*24+(Math.floor(i/4)%2)*10}" cy="${94+Math.floor(i/4)*20}" r="${5+(i%3)}" fill="#7fb0c8" style="animation-delay:${i*.05}s"/>`;
+   return svg(600,330,`<rect x="292" y="70" width="16" height="240" fill="#3d3a33"/><g transform="rotate(5 300 70)"><rect x="70" y="64" width="460" height="10" rx="5" fill="#16140f"/><path d="M160 74V166M450 74V166" stroke="#3d3a33" stroke-width="2"/><rect x="90" y="166" width="140" height="12" rx="4" fill="#3d3a33"/><rect x="380" y="166" width="140" height="12" rx="4" fill="#3d3a33"/>
+   <rect x="104" y="80" width="112" height="86" fill="#3b2a1d"/>${w}
+   <rect x="402" y="118" width="96" height="48" fill="#8a6a48"/><circle cx="430" cy="134" r="3" fill="#7fb0c8"/><circle cx="470" cy="148" r="3" fill="#7fb0c8"/></g>
+   <text class="t-b" x="160" y="236" text-anchor="middle">~320 g</text><text class="t-s" x="160" y="258" text-anchor="middle">1 litro de suelo del kewiñal</text><text class="t-s" x="160" y="276" text-anchor="middle">(0,32 g/cm³, UMSS 2026)</text>
+   <text class="t-b" x="448" y="250" text-anchor="middle">~1,3 kg</text><text class="t-s" x="448" y="272" text-anchor="middle">1 litro de suelo agrícola común</text><text class="t-s" x="448" y="290" text-anchor="middle">(valor de referencia típico)</text>
+   <text class="t-s" x="0" y="322">Azul: espacio que el suelo puede llenar de agua (ilustrativo).</text>`,'Comparación de densidad de suelos')},
+   p:'Un suelo liviano y poroso, que es tres cuartos materia orgánica, guarda agua entre sus poros como una esponja. Por eso el bosque frena la erosión y reduce deslizamientos.',s:'Laboratorio de Suelos y Aguas, UMSS (2026).'},
+ suelolab:{t:'Lo que dijo el laboratorio',vis(){return `<div class="rows">${[['74,5%','Materia orgánica','Horizonte de humus que retiene agua.'],['5,3','pH','Suelo ácido, típico de bosque de altura.'],['0,221','Conductividad','mmhos/cm.'],['46 · 14 · 2,14','Calcio · magnesio · potasio','me/100 g.']].map(r=>`<div style="grid-template-columns:120px 1fr"><b style="font-family:var(--disp);font-size:24px;font-weight:500">${r[0]}</b><div><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('')}</div>`},
+   p:'Las muestras se analizaron en el Laboratorio de Suelos y Aguas de la Universidad Mayor de San Simón.',s:'UMSS (2026), en FAUNAGUA (2026).'},
+ especies:{t:'Cuatro kewiñas, cuatro franjas de altura',vis(){
+   const y=a=>300-(a-3000)*.12; const S=[['P. pepei',3300,4400,''],['P. subtusalbida',3100,4000,'En Peligro, endémica'],['P. pacensis',3100,4000,'En Peligro, endémica · Chiaraje'],['P. lanata',3200,3800,'En Peligro, endémica']];
+   let g='';[3000,3500,4000,4500,5000].forEach(a=>g+=`<line x1="60" x2="600" y1="${y(a)}" y2="${y(a)}" stroke="rgba(22,20,15,.08)"/><text class="t-s" x="54" y="${y(a)+4}" text-anchor="end">${fmt(a)}</text>`);
+   return svg(620,330,`${g}<rect x="60" y="${y(4600)}" width="540" height="${y(3500)-y(4600)}" fill="#cda65a" opacity=".15"/><text class="t-s" x="596" y="${y(4600)+14}" text-anchor="end">Bosque de Chiaraje, 3.500–4.600 m</text>
+   <line x1="60" x2="600" y1="${y(5035)}" y2="${y(5035)}" stroke="#16140f" stroke-dasharray="2 4"/><text class="t-s" x="596" y="${y(5035)-6}" text-anchor="end">Cumbre del Tunari, 5.035 m</text>
+   <line x1="60" x2="600" y1="${y(4808)}" y2="${y(4808)}" stroke="#9a5b34" stroke-dasharray="2 4"/><text class="t-s t-c" x="596" y="${y(4808)-6}" text-anchor="end">Mont Blanc, 4.808 m</text>
+   ${S.map((s,i)=>{const x=120+i*125;return `<rect class="growy" x="${x-18}" y="${y(s[2])}" width="36" height="${y(s[1])-y(s[2])}" rx="18" fill="${s[0]==='P. pacensis'?'rgba(180,88,47,.35)':'rgba(111,125,80,.25)'}" style="animation-delay:${i*.1}s"/>${tree(x,(y(s[1])+y(s[2]))/2+22,44,'pop',.3+i*.1)}<text class="t-m" x="${x}" y="${y(s[1])+20}" text-anchor="middle" font-style="italic">${s[0]}</text><text class="t-s" x="${x}" y="${y(s[1])+36}" text-anchor="middle">${fmt(s[1])}–${fmt(s[2])} m</text>`}).join('')}`,'Rangos de altitud de cuatro especies de Polylepis')},
+   p:'En el Tunari conviven cuatro especies de kewiña, cada una en su franja de altura. La kewiña ocupa el 33% de la vegetación de alta montaña del parque (3.100–4.400 m). El bosque de Chiaraje es de P. pacensis, con solo dos puntos de distribución conocidos en el país.',s:'Investigación documental del proyecto; Boza y Kessler (2022); Libro Rojo (2026).'},
+ perfil:{t:'Dónde crece la kewiña',vis(){return `<figure><img src="img/perfil_veg.jpg" alt="Perfil de vegetación de Chiaraje" loading="lazy" style="background:#fff"><figcaption>Perfil de vegetación: la kewiña ocupa grietas y afloramientos rocosos. FAUNAGUA 2026.</figcaption></figure>`},
+   p:'Sobrevive entre rocas, donde el ganado no llega. La vertiente sur del Tunari, que mira a la ciudad, sufre además loteamientos, incendios y urbanización sobre los 2.750 m; la vertiente norte de Cocapata aún conserva parches primarios.',s:'FAUNAGUA (2026).'},
+ jucumari:{t:'¿Hay jucumari en Chiaraje?',vis(){return `<div class="rows"><div><span class="badge vu">VU</span><div><b>Tremarctos ornatus · oso andino</b><span>Vulnerable en el Libro Rojo de los Vertebrados de Bolivia (2026).</span></div></div><div><span class="badge q">✓</span><div><b>Incacasani–Altamachi</b><span>El Libro Rojo la cita entre las áreas del jucumari en Cochabamba.</span></div></div><div><span class="badge q">?</span><div><b>Chiaraje</b><span>Presencia por confirmar. El Libro Rojo no lista al PN Tunari para la especie.</span></div></div></div>`},
+   p:'El proyecto no afirma su presencia en Chiaraje. Los registros de fauna de las salidas y la ciencia ciudadana pueden ayudar a confirmarla o descartarla.',s:'Libro Rojo de los Vertebrados de Bolivia (2026).'},
+ incendio:{t:'430 ha frente al tamaño de Chiaraje',vis(){const a=240,b=a*Math.sqrt(430/729);
+   return svg(560,300,`<rect x="40" y="30" width="${a}" height="${a}" fill="rgba(111,125,80,.18)" stroke="#16140f"/><rect class="pop" x="40" y="${30+a-b}" width="${b}" height="${b}" fill="rgba(180,88,47,.55)" stroke="#8a4426"/><text class="t-m" x="${40+a+20}" y="60">729 ha</text><text class="t-s" x="${40+a+20}" y="78">la comunidad de Chiaraje</text><text class="t-m t-c" x="${40+a+20}" y="${30+a-b+30}">+430 ha</text><text class="t-s" x="${40+a+20}" y="${30+a-b+48}">ardieron en el parque en 2025</text>`,'Comparación de superficies')},
+   p:'Solo en 2025 ardió en el PN Tunari una superficie equivalente a casi el 60% de toda la comunidad de Chiaraje. Las áreas están dibujadas a escala entre sí.',s:'Mongabay (2026); FAUNAGUA (2026). Proporción: cálculo propio.'},
+ regeneracion:{t:'Brotes que no llegan a árbol joven',vis(){
+   let a='',b='';for(let i=0;i<21;i++)a+=`<use href="#sprout" class="pop" x="${20+i*25}" y="40" width="20" height="24" style="animation-delay:${i*.03}s"/>`;for(let i=0;i<9;i++)b+=`<use href="#sprout" class="pop" x="${20+i*25}" y="140" width="20" height="24" style="animation-delay:${.5+i*.03}s"/>`;
+   return svg(560,250,`<text class="t-m" x="20" y="28">Área 1: 21 brotes (52% plantines)</text>${a}<text class="t-m" x="20" y="128">Área 2: 9 brotes</text>${b}<path d="M20 200h520" stroke="#9a5b34" stroke-dasharray="4 4"/><text class="t-s t-c" x="20" y="222">Árboles jóvenes: casi ninguno. El ganado se come los brotes de más de 5 cm.</text>`,'Regeneración en las parcelas')},
+   p:'Las parcelas muestran un bosque funcional pero frágil: hay brotes, pero casi ninguno llega a árbol joven. Proteger micrositios y cercar temporalmente ayuda a que los jóvenes lleguen a adultos.',s:'FAUNAGUA (2026).'},
+ mapa:{t:'El mapa de conservación de Chiaraje',vis(){
+   const S=[['Muy bueno',4.7,'#4f7340'],['Bueno',16,'#a3ad7a'],['Regular',61.2,'#cda65a'],['Malo y antrópico',16.7,'#9a5b34']];let x=0;
+   const bars=S.map(s=>{const w=s[1]/100*600;const r=`<rect class="grow" x="${x}" y="0" width="${w-2}" height="26" fill="${s[2]}"/>`;x+=w;return r}).join('');x=0;
+   return svg(600,64,bars+S.map(s=>{const w=s[1]/100*600;const t=`<text class="t-s" x="${x}" y="46">${s[0]}</text><text class="t-m" x="${x}" y="62">${fmt(s[1],1)}%</text>`;x+=w;return s[1]>5?t:''}).join(''),'Superficie por estado')+`<figure><img src="img/mapa_conservacion.jpg" alt="Mapa del estado de conservación de la vegetación de Chiaraje" loading="lazy"><figcaption>Estado de conservación de la vegetación de Chiaraje, escala 1:30.000. Delgado O., 2026, FAUNAGUA–ECOAN.</figcaption></figure>`},
+   p:'Cada color tiene su estrategia: proteger lo denso, enriquecer lo disperso, plantar núcleos en el pajonal y regular el pastoreo donde hay cultivos.',s:'Delgado O. (2026), FAUNAGUA–ECOAN.'},
+ actas:{t:'119.000 plantines en cinco comunidades',vis(){
+   const C=[['Subcentral Kumara',60,'#4f7340','Kumara, San Bartolomé y Palca Palca'],['Chiaraje',21,'#9a5b34',''],['Icari',16,'#cda65a',''],['Corral Pampa',12,'#4a7088',''],['Huari Pucara',10,'#8d877b','']];
+   let t='',i=0;C.forEach(c=>{for(let k=0;k<c[1];k++){const col=i%20,row=Math.floor(i/20);t+=`<g class="pop" style="animation-delay:${i*.008}s;color:${c[2]}"><rect x="${col*29}" y="${row*34}" width="0" height="0"/><path d="M${col*29+10} ${row*34+30}v-8" stroke="#8a4426" stroke-width="1.6"/><circle cx="${col*29+10}" cy="${row*34+15}" r="9" fill="${c[2]}"/></g>`;i++}});
+   const leg=C.map((c,j)=>`<rect x="${(j%3)*200}" y="${232+Math.floor(j/3)*36}" width="12" height="12" fill="${c[2]}"/><text class="t-m" x="${(j%3)*200+18}" y="${243+Math.floor(j/3)*36}" style="font-size:13px">${c[0]} · ${fmt(c[1]*1000)}</text>${c[3]?`<text class="t-s" x="${(j%3)*200+18}" y="${259+Math.floor(j/3)*36}" style="font-size:10.5px">${c[3]}</text>`:''}`).join('');
+   return svg(590,310,t+leg,'Plantines por comunidad')},
+   p:'Cinco comunidades del paisaje firmaron actas en 2026 para la campaña 2026–2027. Cada círculo del dibujo representa 1.000 plantines.',s:'Actas comunales 2026.'},
+ centro:{t:'Cómo se financió el Centro Warmi Kewiñas',vis(){
+   return svg(600,150,`<rect class="grow" x="0" y="30" width="${600*.637-2}" height="40" fill="#9a5b34"/><rect class="grow" x="${600*.637}" y="30" width="${600*.363}" height="40" fill="#cda65a" style="animation-delay:.2s"/><text class="t-m" x="0" y="20">GAM de Cocapata · 63,7%</text><text class="t-m" x="${600*.637}" y="20">FAUNAGUA · 36,3%</text><text class="t-s" x="0" y="92">Bs 158.757,45</text><text class="t-s" x="${600*.637}" y="92">Bs 90.480, fondos de Acción Andina</text><text class="t-b" x="0" y="140">Bs 249.237,45 <tspan class="t-s" style="font-family:DM Sans">(USD 35.809,98)</tspan></text>`,'Financiamiento de la obra')+`<div class="chips"><span>Salón comunal</span><span>Sala de capacitación para mujeres</span><span>Sala cuna</span><span>Cocina equipada</span></div>`},
+   p:'El convenio entre el GAM de Cocapata y FAUNAGUA se firmó el 25 de agosto de 2025, por cuatro años. El Centro se inauguró el 10 de agosto de 2026, con aportes del premio Daughters for Earth (vía Acción Andina), AMB Foundation, el GAM y la comunidad. El piloto no construye: adecua y pone a funcionar lo que ya existe.',s:'Convenio GAM de Cocapata–FAUNAGUA (2025); FAUNAGUA.'},
+ reparto:{t:'Cómo se reparten €100 de tarifa',vis(){
+   let w='';for(let i=0;i<100;i++){const c=i<55?'#cda65a':i<80?'#9a5b34':'#8d877b';w+=`<rect class="pop" x="${(i%10)*22}" y="${Math.floor(i/10)*22}" width="19" height="19" fill="${c}" style="animation-delay:${i*.006}s"/>`}
+   let tr='';for(let i=0;i<29;i++)tr+=tree(270+(i%10)*31,70+Math.floor(i/10)*58,46,'pop',.7+i*.02);
+   return svg(600,240,`${w}<text class="t-m" x="0" y="238" style="font-size:12.5px"><tspan fill="#9a7a2a">■</tspan> 55% familias  <tspan fill="#9a5b34">■</tspan> 25% bosque  <tspan fill="#8d877b">■</tspan> 20% comercialización</text><text class="t-m" x="262" y="12">€25 ≈ 29 kewiñas establecidas</text>${tr}`,'Reparto de €100')},
+   p:'Propuesta inicial, que se validará con la comunidad. Con el costo de referencia de FONABOSQUE (Bs 6,50 por plantín establecido, unos €0,85), los €25 que vuelven al bosque alcanzan para unas 29 kewiñas.',s:'Anexo 1; FONABOSQUE.'},
+ ciclo:{t:'El ciclo de reinversión',vis(){
+   const P=[['El visitante paga','la tarifa incluye el aporte'],['Las familias','cobran por sus servicios'],['El fondo del bosque','recibe el 25%'],['Acción en campo','elegida con la comunidad'],['Verificación','registros y parcelas'],['Mejor destino','más bosque, más razones para volver']];
+   const cx=350,cy=210,r=150;let t=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(22,20,15,.2)" stroke-dasharray="4 6"/>`;
+   P.forEach((p,i)=>{const a=-Math.PI/2+i*2*Math.PI/6,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);t+=`<circle class="pop" cx="${x}" cy="${y}" r="22" fill="${i===2||i===3?'#9a5b34':'#16140f'}" style="animation-delay:${i*.12}s"/><text x="${x}" y="${y+5}" text-anchor="middle" fill="#f3f0e9" font-size="14" font-weight="700" font-family="DM Sans">${i+1}</text><text class="t-m" x="${x+(Math.cos(a)>.2?30:Math.cos(a)<-.2?-30:0)}" y="${y+(Math.abs(Math.cos(a))<.2?(Math.sin(a)<0?-32:44):-2)}" text-anchor="${Math.cos(a)>.2?'start':Math.cos(a)<-.2?'end':'middle'}" style="font-size:13px">${p[0]}</text><text class="t-s" x="${x+(Math.cos(a)>.2?30:Math.cos(a)<-.2?-30:0)}" y="${y+(Math.abs(Math.cos(a))<.2?(Math.sin(a)<0?-16:60):14)}" text-anchor="${Math.cos(a)>.2?'start':Math.cos(a)<-.2?'end':'middle'}" style="font-size:11px">${p[1]}</text>`});
+   return svg(700,420,t,'Ciclo de reinversión')},
+   p:'En el piloto se acuerdan el aporte incluido en la tarifa, su administración y la acción prioritaria, y se documentan la recaudación y el uso del dinero. La meta es completar y verificar al menos un ciclo.',s:'Anexo 1.'},
+ calendario:{t:'El calendario del territorio',vis(){
+   const M=['E','F','M','A','M','J','J','A','S','O','N','D'],x=m=>20+m*47;
+   const band=(y,a,b,c,l)=>{let r='';const seg=(s,e)=>r+=`<rect class="grow" x="${x(s)}" y="${y}" width="${x(e+1)-x(s)-3}" height="16" fill="${c}"/>`;if(a<=b)seg(a,b);else{seg(a,11);seg(0,b)}return r+`<text class="t-s" x="20" y="${y-5}">${l}</text>`};
+   return svg(600,300,`${M.map((m,i)=>`<text class="t-m" x="${x(i)+20}" y="20" text-anchor="middle">${m}</text>`).join('')}
+   ${band(48,11,1,'#4f7340','Siembra con lluvias')}${band(88,4,4,'#cda65a','Cosecha de semillas')}${band(128,5,7,'#9fb7c4','Vivero en invierno, con heladas de −4 °C')}${band(168,3,10,'#4a7088','Temporada de aves')}
+   ${[[4.85,'27 may','Aniversario de la Central Colquechaca'],[7.03,'2 ago','Fiesta comunal de Chiaraje'],[11.5,'16 dic','Aniversario regional: tarka y moseñada']].map((f,i)=>`<line x1="${20+f[0]*47}" x2="${20+f[0]*47}" y1="200" y2="${222+i*24}" stroke="#9a5b34"/><circle cx="${20+f[0]*47}" cy="200" r="4" fill="#9a5b34"/><text class="t-m" x="${f[0]>9?20+f[0]*47-8:20+f[0]*47+8}" y="${226+i*24}" text-anchor="${f[0]>9?'end':'start'}" style="font-size:12.5px">${f[1]} · <tspan class="t-s">${f[2]}</tspan></text>`).join('')}`,'Calendario anual')},
+   p:'Nunca hay un mes vacío: siembra con lluvias (diciembre–febrero), semillas en mayo, vivero en invierno y aves de abril a noviembre. El piloto elegirá las temporadas de sus dos experiencias.',s:'Plan turístico FAUNAGUA–HOWWE; PTDI de Cocapata.'},
+ atractivos:{t:'Trece atractivos inventariados',vis(){
+   const ic={n:'<path d="M2 26l9-14 5 7 4-5 8 12z" fill="none" stroke="currentColor" stroke-width="1.6"/>',a:'<rect x="5" y="6" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 20l4-8 4 6M12 12h0" stroke="currentColor" stroke-width="1.6" fill="none"/>',c:'<circle cx="15" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 28c0-8 4-12 8-12s8 4 8 12" fill="none" stroke="currentColor" stroke-width="1.6"/>'};
+   const L=[...Array(7).fill(['n','#4a7088']),['a','#9a5b34'],...Array(5).fill(['c','#9a7a2a'])];
+   return svg(600,120,L.map((l,i)=>`<g class="pop" transform="translate(${i*45} 10)" style="color:${l[1]};animation-delay:${i*.05}s">${ic[l[0]]}</g>`).join('')+`<text class="t-m" x="0" y="74">7 naturales</text><text class="t-m" x="315" y="74">1 arqueológico</text><text class="t-m" x="360" y="100">5 de cultura viva</text>`,'Atractivos por tipo')},
+   p:'Lagunas, cascadas, el río Incachaca, los relictos de kewiña, pinturas rupestres, fiestas y ferias. Los relictos del estudio científico, Incachaca y Pilliluwaychu, también están en el inventario turístico.',s:'Ficha de atractivos 2024.'},
+ mercado:{t:'Un mercado grande y un destino aún vacío',vis(){
+   let d='';for(let i=0;i<122;i++)d+=`<circle class="pop" cx="${10+(i%31)*19}" cy="${120+Math.floor(i/31)*19}" r="5" fill="#9a5b34" style="animation-delay:${i*.006}s"/>`;
+   return svg(600,210,`<text class="t-b" x="0" y="36">3,18 millones</text><text class="t-s" x="0" y="58">turistas nacionales viajaron por Bolivia entre enero y octubre de 2024</text><text class="t-m" x="0" y="100">Cocapata, 2016–2020: cada punto es un visitante</text>${d}`,'Comparación de visitantes')},
+   p:'Unos 122 visitantes llegaron a todo Cocapata en cinco años: cerca de dos al mes. El turismo nacional gastó Bs 2.396 millones en diez meses de 2024. Por eso el piloto vende salidas reales y calcula el punto de equilibrio de cada experiencia antes de crecer.',s:'Viceministerio de Turismo (2024); PTDI de Cocapata.'},
+ presupuesto:{t:'Los €95.000 completos',vis(){return budgetSVG()},
+   p:'Seis rubros. Ninguno es obra nueva: el piloto diseña, adecua, forma, opera, mide y decide con lo que ya existe.',s:'Anexo 1.'},
+ aportes:{t:'Lo que ya existe y suma al piloto',vis(){return `<div class="rows">${[['Bs 249.237','Centro Warmi Kewiñas, ya construido','Convenio GAM de Cocapata–FAUNAGUA; inaugurado en agosto de 2026.'],['100.000','plantines al año','Capacidad del vivero comunal de Chiaraje; otro vivero opera en Kumara.'],['+467.000','kewiñas plantadas desde 2022','Programa de restauración de FAUNAGUA con Acción Andina.'],['119.000','plantines acordados','Actas de cinco comunidades para 2026–2027.'],['2026','Línea base del bosque','Estudio de caracterización con parcelas, suelo y mapa de conservación.']].map(r=>`<div style="grid-template-columns:130px 1fr"><b style="font-family:var(--disp);font-size:24px;font-weight:500">${r[0]}</b><div><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('')}</div>`},
+   p:'Son aportes complementarios documentados, no fondos que se piden a CAF.',s:'Convenio GAM–FAUNAGUA; actas 2026; FAUNAGUA (2026).'},
+ registro:{t:'Qué se registra en cada salida',vis(){return `<div class="chips">${['Reservas','Ocupación','Costos reales','Pagos a prestadores','Ingresos por hogar','Participación de mujeres y jóvenes','Aporte recaudado y aplicado','Venta directa y por operadores','Registros de aves'].map(c=>`<span>${c}</span>`).join('')}</div>`},
+   p:'Con esos registros se ajustan tarifas, cupos y canales, y se decide qué experiencia continúa, con qué frecuencia y en qué temporada.',s:'Anexo 1.'},
+ parcelas:{t:'Las dos parcelas, a escala',vis(){
+   const s=11,a=Math.sqrt(340)*s,b=Math.sqrt(250)*s;let t='';
+   const rnd=(n,x0,side,seed)=>{let r='';for(let i=0;i<n;i++){const u=((i*73+seed)%97)/97,v=((i*41+seed*3)%89)/89;r+=`<circle class="pop" cx="${x0+8+u*(side-16)}" cy="${30+8+v*(side-16)}" r="4" fill="#4f7340" style="animation-delay:${i*.03}s"/>`}return r};
+   t+=`<rect x="20" y="30" width="${a}" height="${a}" fill="rgba(205,166,90,.12)" stroke="#16140f"/>${rnd(19,20,a,5)}<text class="t-m" x="20" y="${a+54}">Área 1 · 340 m²</text><text class="t-s" x="20" y="${a+72}">558,8 árboles/ha</text>`;
+   t+=`<rect x="${60+a}" y="30" width="${b}" height="${b}" fill="rgba(205,166,90,.12)" stroke="#16140f"/>${rnd(18,60+a,b,11)}<text class="t-m" x="${60+a}" y="${a+54}">Área 2 · 250 m²</text><text class="t-s" x="${60+a}" y="${a+72}">720 árboles/ha</text>`;
+   t+=`<line x1="${100+a+b}" x2="${100+a+b+5*s}" y1="${30+a}" y2="${30+a}" stroke="#16140f"/><text class="t-s" x="${100+a+b}" y="${a+48}">5 m</text>`;
+   return svg(560,a+90,t,'Parcelas permanentes a escala')},
+   p:'Dos parcelas permanentes en Incachaca y una evaluación rápida en Pilliluwaychu. En cada árbol numerado se mide altura, diámetro, copa, frutos y sanidad. Puntos ubicados de forma ilustrativa; su número corresponde a la densidad medida.',s:'FAUNAGUA (2026).'},
+ estudio:{t:'Un bosque ya medido, árbol por árbol',vis(){return `<div class="rows">${[['Feb 2026','Caracterización de bosques en pie de P. pacensis en Chiaraje','FAUNAGUA, proyecto «Tunari Norte» con Acción Andina.'],['2 + 1','Parcelas permanentes y evaluación rápida','Incachaca (340 y 250 m²) y Pilliluwaychu.'],['52 pts','Estado de conservación: Vulnerable','Perdió cerca del 50% del bosque original y está fragmentado, aunque por dentro está poco degradado y es muy apto para aves.'],['89 pts','Prioridad de conservación: Muy alta',''],['UMSS','Validación','Herbario Nacional Forestal «Martín Cárdenas» y Laboratorio de Suelos y Aguas.']].map(r=>`<div style="grid-template-columns:96px 1fr"><b style="font-family:var(--disp);font-size:22px;font-weight:500">${r[0]}</b><div><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('')}</div>`},
+   p:'Pocas propuestas llegan con una línea base ecológica propia. Esta permite medir si el piloto mejora el bosque.',s:'FAUNAGUA (2026).'},
+ decisiones:{t:'Lo que decide la comunidad',vis(){return `<div class="rows">${[['1','Qué se visita','Sitios, recorridos y cupos.'],['2','Qué se comparte','Relatos e imágenes de la comunidad.'],['3','Cómo se remunera','Servicios, responsabilidades y pagos a prestadores.'],['4','A qué va el aporte','La acción prioritaria en el bosque.']].map(r=>`<div><b style="font-family:var(--disp);font-size:26px;font-weight:500;color:var(--bark)">${r[0]}</b><div><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('')}</div>`},
+   p:'Las Warmi Kewiñas lideran el componente comunitario. Una sala cuna en el Centro permite que las mujeres participen.',s:'Anexo 1.'},
+ roles:{t:'Quién hace qué',vis(){return `<div class="rows">${[['FAUNAGUA','Ejecución, acuerdos y seguimiento ecológico. Responde ante CAF.'],['HOWWE','Diseño, costeo, venta, operación y protocolos de las experiencias.'],['Warmi Kewiñas y Chiaraje','Sitios, relatos, remuneración y destino del aporte.'],['GAM y PN Tunari','Uso del Centro y de los sitios, según sus competencias.']].map(r=>`<div style="grid-template-columns:170px 1fr"><b style="font-family:var(--disp);font-size:21px;font-weight:500">${r[0]}</b><div><span style="margin:0">${r[1]}</span></div></div>`).join('')}</div>`},
+   p:'Una sola entidad firma y responde ante CAF; cada aliado lidera los pasos en los que tiene experiencia.',s:'Anexo 1.'},
+ replica:{t:'El camino de la réplica',vis(){
+   const P=[['Chiaraje','piloto'],['Icari','primera réplica'],['Subcentral Kumara','3 comunidades'],['Vertiente norte','PN Tunari'],['Andes de Bolivia','7 departamentos']];
+   return svg(600,150,`<path d="M30 70 H570" stroke="#16140f" stroke-dasharray="3 5"/>${P.map((p,i)=>{const x=30+i*135;return `<circle class="pop" cx="${x}" cy="70" r="${10+i*3}" fill="${i?'none':'#9a5b34'}" stroke="#9a5b34" stroke-width="2" style="animation-delay:${i*.12}s"/><text class="t-m" x="${x}" y="${i%2?30:118}" text-anchor="${i===0?'start':i===4?'end':'middle'}" style="font-size:13px">${p[0]}</text><text class="t-s" x="${x}" y="${i%2?46:134}" text-anchor="${i===0?'start':i===4?'end':'middle'}">${p[1]}</text>`}).join('')}`,'Camino de réplica')+`<div class="duo" style="margin-top:6px"><div><b style="font-family:var(--disp);font-size:20px">Se comparte</b><div class="chips"><span>Comercialización</span><span>Rendición de cuentas</span><span>Monitoreo y ciencia ciudadana</span></div></div><div><b style="font-family:var(--disp);font-size:20px">Decide cada territorio</b><div class="chips"><span>Recorridos y cupos</span><span>Reparto de beneficios</span><span>Relatos e imágenes</span></div></div></div>`},
+   p:'El piloto deja documentado qué funcionó para que otra comunidad pueda adaptarlo sin empezar de cero.',s:'Anexo 1; actas 2026; Libro Rojo (2026).'},
+ mapaR:{t:'Chiaraje, Icari y Kumara en el mapa',vis(){return `<figure><img src="img/mapa_reforestacion.jpg" alt="Mapa de la zona de reforestación de kewiñas: Chiaraje, Icari y Kumara y el límite del Parque Nacional Tunari" loading="lazy"><figcaption>Zona de reforestación de kewiñas. Mapa SIG del proyecto, 2026: OpenStreetMap, límites de áreas protegidas y Esri.</figcaption></figure>`},
+   p:'Chiaraje e Icari aparecen dentro del límite del PN Tunari; Kumara, al norte, en su colindancia.',s:'Mapa SIG del proyecto (2026).'}
+};
+
+const RUB=[['Estudio de consultoría',35000,'#cda65a','p1'],['Pilotaje, promoción y comercialización',20000,'#9a5b34','p4'],['Coordinación técnica y seguimiento',20000,'#8d877b','p6'],['Adecuaciones del Centro',12000,'#a3ad7a','p2'],['Formación y materiales',5000,'#4a7088','p3'],['Monitoreo y verificación',3000,'#e6e8e3','p5']];
+function budgetSVG(){let x=0;const W=600;
+  return svg(W,RUB.length*38+60,RUB.map((r,i)=>{const w=r[1]/95000*W;const o=`<rect class="grow" x="0" y="${i*38}" width="${w}" height="24" fill="${r[2]==='#e6e8e3'?'#cfd2ca':r[2]}" style="animation-delay:${i*.06}s"/><text class="t-m" x="${w+8}" y="${i*38+17}" style="font-size:13px">€${fmt(r[1])} · ${r[0]}</text><text class="t-s" x="${w+8}" y="${i*38+32}" style="font-size:10.5px">${fmt(r[1]/950,1)}%</text>`;return o}).join('')+`<text class="t-b" x="0" y="${RUB.length*38+40}">€95.000</text>`,'Presupuesto por rubro')}
+
+
+
+/* ================= visuales nuevos de v5 (cada uno se usa una sola vez) ================= */
+Object.assign(D,{
+ avesGal:{vis(){const A=[['ave_zonotrichia','Zonotrichia capensis','chingolo'],['ave_bolborhynchus','Bolborhynchus orbygnesius (cf.)','perico andino'],['ave_sicalis','Sicalis uropygialis','jilguero cara gris'],['ave_geospizopsis','Geospizopsis unicolor','fringilo plomizo'],['ave_geranoaetus','Geranoaetus melanoleucus','águila mora'],['ave_phrygilus','Phrygilus atriceps','yal cabeza negra']];
+   return `<div class="gal">${A.map(a=>`<figure><img src="img/${a[0]}.jpg" alt="${a[1]}" loading="lazy"><figcaption><i>${a[1]}</i><small>${a[2]}</small></figcaption></figure>`).join('')}</div>`}},
+ agua:{vis(){const y=a=>318-(a-2400)*.11;const xr=a=>260+(5035-a)/1815*360;
+   let t='';for(let a=4560;a>=3520;a-=70){const x=xr(a);t+=tree(x+((a/70)%2?6:-4),y(5035-(x-260)/360*1815)+3,24+((a/70)%3)*4,'pop',(4560-a)/2600)}
+   let rain='';for(let i=0;i<8;i++){const x=360+i*24;rain+=`<line class="fall" x1="${x}" y1="58" x2="${x-8}" y2="${110+i*6}" stroke="#4a7088" stroke-width="1.4" style="animation-delay:-${i*.15}s"/>`}
+   const drops=Array.from({length:14},(_,i)=>{const a=4500-i*70,x=xr(a)+8;return `<circle cx="${x}" cy="${y(a)+14+(i%3)*4}" r="${2.5+(i%2)}" fill="#4a7088"/>`}).join('');
+   return svg(640,350,`<defs><linearGradient id="amt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cbbfa9"/><stop offset="1" stop-color="#a39478"/></linearGradient></defs>
+   <path d="M0 ${y(2570)} L120 ${y(2570)} C170 ${y(2900)} 220 ${y(4300)} 260 ${y(5035)} L620 ${y(3220)} L640 ${y(3200)} L640 340 L0 340Z" fill="url(#amt)"/>
+   <polygon points="${xr(4600)},${y(4600)} ${xr(3500)},${y(3500)} ${xr(3500)+8},${y(3500)+26} ${xr(4600)+8},${y(4600)+26}" fill="#4a3222"/>${drops}${t}
+   <g class="drift"><ellipse cx="420" cy="52" rx="90" ry="16" fill="#fff" opacity=".8"/></g>${rain}
+   <path class="flow" d="M${xr(4000)} ${y(4000)+40} C 380 250 220 290 120 ${y(2570)+14}" stroke="#4a7088" stroke-width="4" fill="none" stroke-linecap="round"/>
+   <g fill="#6b5a46">${[0,1,2,3,4,5].map(i=>`<rect x="${12+i*17}" y="${y(2570)-(10+(i*7)%16)}" width="12" height="${10+(i*7)%16}"/>`).join('')}</g>
+   <circle cx="260" cy="${y(5035)}" r="5" fill="#16140f"/><text class="t-m" x="246" y="${y(5035)-8}" text-anchor="end">Cumbre · 5.035 m</text>
+   <line x1="${xr(4300)+6}" y1="${y(4300)+4}" x2="480" y2="236" stroke="#16140f" stroke-width=".8"/><text class="t-m" x="484" y="240">Bosque de Chiaraje</text><text class="t-s" x="484" y="257">3.500–4.600 m</text><text class="t-s" x="484" y="273">capta neblina y lluvia</text>
+   <text class="t-m" x="282" y="150">Suelo esponja</text><text class="t-s" x="282" y="167">74,5% materia orgánica</text><text class="t-s" x="282" y="184">el agua se infiltra</text>
+   <text class="t-m" x="10" y="${y(2570)+34}">Cochabamba · 2.570 m</text><text class="t-s" x="10" y="${y(2570)+51}">región metropolitana</text>
+   <text class="t-s" x="636" y="345" text-anchor="end" style="font-size:11px">Esquema, no a escala</text>`,'Corte del Tunari: del bosque a la ciudad')+D.misicuni.vis().replace('viewBox="0 0 620 200"','viewBox="0 0 760 200"')}},
+ corteza:{vis(){return `<div class="duo"><figure><img src="img/rama_corteza.jpg" alt="Rama de kewiña con corteza laminada" loading="lazy"><figcaption>Corteza rojiza en láminas: aislante térmico de altura.</figcaption></figure><figure><img src="img/corteza_placa.jpg" alt="Árbol numerado con placa de monitoreo" loading="lazy"><figcaption>Árbol plaqueado de una parcela permanente.</figcaption></figure></div>`}},
+ acciones:{vis(){const A=[['Cuidado de plantaciones','riego, reposición y cercos temporales','<path d="M24 42V22"/><path d="M24 26c-8 0-12-6-12-12 7 0 12 5 12 12zM24 22c0-8 5-12 12-12 0 7-5 12-12 12z"/><path d="M8 42h32"/>'],['Protección de relictos','cercos y control del pastoreo','<path d="M6 40V16M18 40V12M30 40V12M42 40V16"/><path d="M4 22h40M4 32h40"/>'],['Brigadas contra incendios','prevención y alerta comunal','<path d="M24 44c-8 0-13-5-13-12 0-8 7-11 8-19 4 3 6 7 6 11 2-2 3-4 3-7 5 4 8 9 8 15 0 7-5 12-12 12z"/>']];
+   return `<div class="icons3">${A.map(a=>`<div><svg viewBox="0 0 48 48">${a[2]}</svg><b>${a[0]}</b><span>${a[1]}</span></div>`).join('')}</div>`+svg(600,92,`<text class="t-s" x="0" y="16">La comunidad elige una; se paga con el aporte y se verifica en</text><rect x="0" y="30" width="270" height="52" rx="10" fill="rgba(79,115,64,.14)" stroke="#4f7340"/><text class="t-m" x="16" y="62">Parcela 1 · Incachaca · 340 m²</text><rect x="290" y="30" width="230" height="52" rx="10" fill="rgba(79,115,64,.14)" stroke="#4f7340"/><text class="t-m" x="306" y="62">Parcela 2 · 250 m²</text>`,'Parcelas de verificación')}},
+ servicios:{vis(){const S=[['Guiado','guías locales formados','<circle cx="24" cy="12" r="6"/><path d="M12 44c0-12 5-18 12-18s12 6 12 18"/><path d="M36 30l6-14"/>'],['Cocina','comida del territorio','<path d="M8 22h32c0 10-7 16-16 16S8 32 8 22z"/><path d="M16 14c0-4 4-4 4-8M26 14c0-4 4-4 4-8"/>'],['Transporte','traslados locales','<path d="M6 32h36l-3-9-5-6H14l-5 6z"/><circle cx="14" cy="34" r="4"/><circle cx="34" cy="34" r="4"/>'],['Alojamiento','en el Centro y en casas','<path d="M6 24L24 10l18 14"/><path d="M10 21v21h28V21"/><path d="M20 42V30h8v12"/>']];
+   return `<div class="icons4">${S.map(s=>`<div><svg viewBox="0 0 48 48">${s[2]}</svg><b>${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>`+`<p style="font-size:14px;color:rgba(29,36,31,.75);margin-top:4px">Cada pago se registra por hogar, con la participación de mujeres y jóvenes.</p>`}},
+ canales:{vis(){return `<div class="rows">${[['1','Venta directa de HOWWE','Turismo receptivo con cartera nacional e internacional.'],['2','Excursiones desde Cochabamba','Mercado nacional, a 3 a 5 horas por carretera.'],['3','Itinerarios de aves','BirdQuest y DOF Travel ya llevan grupos al PN Tunari.'],['4','Registro por canal','Qué canal vende, a qué costo y en qué temporada.']].map(r=>`<div><b style="font-family:var(--disp);font-size:28px;color:#2e5a35">${r[0]}</b><div><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('')}</div>`}},
+ salidas:{vis(){const tk=(x,y,c,l,s)=>`<g class="pop"><rect x="${x}" y="${y}" width="130" height="78" rx="12" fill="${c}"/><circle cx="${x+130}" cy="${y+39}" r="9" fill="#e9ebe5"/><circle cx="${x}" cy="${y+39}" r="9" fill="#e9ebe5"/><text x="${x+18}" y="${y+34}" font-family="Urbanist" font-size="24" font-weight="700" fill="#fff">${l}</text><text x="${x+18}" y="${y+56}" font-size="12.5" fill="rgba(255,255,255,.85)" font-family="DM Sans">${s}</text></g>`;
+   return svg(620,250,`<text class="t-m" x="0" y="20">Experiencia 1 · naturaleza y restauración</text>${tk(0,34,'#4f7340','Salida 1','mercado nacional')}${tk(160,34,'#4f7340','Salida 2','mercado nacional')}
+   <text class="t-m" x="0" y="150">Experiencia 2 · naturaleza y aviturismo</text>${tk(0,164,'#2f5a4a','Salida 1','grupos especializados')}${tk(160,164,'#2f5a4a','Salida 2','grupos especializados')}
+   <line x1="330" x2="330" y1="34" y2="242" stroke="rgba(22,20,15,.2)" stroke-dasharray="3 4"/>
+   <text class="t-m" x="350" y="60">Se mide en cada una</text>${['Reservas y ocupación','Costos reales','Pagos a prestadores','Aporte al bosque'].map((m,i)=>`<circle cx="358" cy="${88+i*36}" r="5" fill="#4f7340"/><text class="t-s" x="372" y="${93+i*36}" style="font-size:14px">${m}</text>`).join('')}
+   <text class="t-m" x="350" y="236">→ punto de equilibrio</text>`,'Cuatro salidas pagadas')}},
+ cicloTres:{vis(){const P=[['Recaudado','en cada salida, separado de los pagos'],['Aplicado','a la acción elegida por la comunidad'],['Verificado','en campo y en las parcelas']];
+   return svg(620,170,P.map((p,i)=>{const x=10+i*210;return `<g class="pop" style="animation-delay:${i*.15}s"><circle cx="${x+40}" cy="54" r="40" fill="${['#e0bc68','#4f7340','#2f5a4a'][i]}"/><text x="${x+40}" y="64" text-anchor="middle" font-family="Urbanist" font-size="30" font-weight="700" fill="#fff">${i+1}</text></g><text class="t-m" x="${x}" y="124">${p[0]}</text><text class="t-s" x="${x}" y="144" style="font-size:12.5px">${p[1]}</text>${i<2?`<path d="M${x+94} 54h96" stroke="#16140f" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#ar3)"/>`:''}`}).join('')+`<defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16140f"/></marker></defs>`,'Ciclo de reinversión en tres pasos')}},
+ riesgos:{vis(){return `<div class="rows">${[['1','Daño a relictos y fauna','Grupos pequeños, trazados que evitan zonas frágiles; se reducen cupos o se cambian recorridos si hay daño.'],['2','Incendios, clima y acceso','Sin fogatas, alertas con brigadas comunales, revisión del acceso antes de cada salida, criterios de suspensión y contactos de emergencia.'],['3','Presión sobre el Centro','Adecuaciones de bajo impacto según el flujo, responsables de residuos y mantenimiento.'],['4','Reparto desigual o sobrecarga de las mujeres','Criterios acordados con las Warmi Kewiñas, horarios con las familias, sala cuna y revisión de quién gana y quién carga más.'],['5','Conflictos de territorio, relatos o ingresos','Acuerdos sobre sitios, relatos, imágenes y reglas del aporte; canal de quejas e informes periódicos.']].map(r=>`<div><b style="font-family:var(--disp);font-size:28px;color:#9a5b34">${r[0]}</b><div><b>${r[1]}</b><span>${r[2]}</span></div></div>`).join('')}</div>`}},
+ ciclo:{vis(){const P=[['El visitante paga','la tarifa incluye el aporte'],['Las familias','cobran por sus servicios'],['El fondo del bosque','recibe el 25%'],['Acción en campo','elegida con la comunidad'],['Verificación','registros y parcelas'],['Mejor destino','más bosque, más visitas']];
+   const cx=380,cy=230,r=130;let t=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(22,20,15,.25)" stroke-width="1.5" stroke-dasharray="5 7"/>`;
+   P.forEach((p,i)=>{const a=-Math.PI/2+i*Math.PI/3,x=cx+r*Math.cos(a),y=cy+r*Math.sin(a),c=Math.cos(a),side=c>.2?'start':c<-.2?'end':'middle',dx=c>.2?34:c<-.2?-34:0,dy=Math.abs(c)<.2?(Math.sin(a)<0?-44:52):-4;
+     t+=`<circle class="pop" cx="${x}" cy="${y}" r="24" fill="${i===2||i===3?'#4f7340':'#1d241f'}" style="animation-delay:${i*.12}s"/><text x="${x}" y="${y+6}" text-anchor="middle" fill="#fff" font-size="17" font-weight="700" font-family="Urbanist">${i+1}</text><text class="t-m" x="${x+dx}" y="${y+dy}" text-anchor="${side}" style="font-size:17px;font-weight:700">${p[0]}</text><text class="t-s" x="${x+dx}" y="${y+dy+19}" text-anchor="${side}" style="font-size:14px">${p[1]}</text>`});
+   return svg(760,440,t+`<text x="${cx}" y="${cy+8}" text-anchor="middle" font-family="Urbanist" font-size="22" font-weight="600" fill="#2e5a35">Un ciclo</text>`,'Ciclo de reinversión')}},
+ amenazadas:{vis(){const R=[['cr','CR','Abrocoma boliviensis','rata chinchilla boliviana'],['en','EN','Hippocamelus antisensis','taruka'],['en','EN','Poospiza garleppi','monterita cochabambina, endémica'],['en','EN','Conirostrum binghami','pájaro kewiñero'],['en','EN','Cranioleuca henricae','ave endémica de Bolivia'],['vu','VU','Vultur gryphus','cóndor andino'],['vu','VU','Sylviorthorhynchus yanacensis','tijeral leonado'],['vu','VU','Agriornis albicauda','registrada en Pintumayu'],['vu','VU','Andigena cucullata','tucán de montaña'],['vu','VU','Phegornis mitchellii','chorlito cordillerano']];
+   return `<div class="rows two">${R.map(r=>`<div><span class="badge ${r[0]}">${r[1]}</span><div><b><i>${r[2]}</i></b><span>${r[3]}</span></div></div>`).join('')}</div><p style="font-size:12.5px;color:rgba(29,36,31,.6);margin-top:8px">CR: En Peligro Crítico · EN: En Peligro · VU: Vulnerable. Además, el gato andino (CR) y el jucumari (VU) se citan para Cochabamba.</p>`}},
+ wOrg:{vis(){const G=[['2022','10'],['después','20'],['hoy','25']];
+   let b='';G.forEach((g,i)=>{const h=+g[1]*6;b+=`<rect class="growy" x="${10+i*78}" y="${170-h}" width="56" height="${h}" rx="8" fill="${i===2?'#2e5a35':'#9cbf73'}" style="animation-delay:${i*.15}s"/><text class="t-b" x="${38+i*78}" y="${160-h}" text-anchor="middle" style="font-size:26px">${g[1]}</text><text class="t-s" x="${38+i*78}" y="192" text-anchor="middle">${g[0]}</text>`});
+   const C=['Presidenta','Vicepresidenta','Secretaria de actas','Secretaria de hacienda','Vocal'];
+   let o=`<text class="t-m" x="270" y="16">Directiva propia</text>`;C.forEach((c,i)=>{o+=`<rect x="270" y="${28+i*33}" width="250" height="27" rx="13.5" fill="#fff"/><circle cx="286" cy="${41.5+i*33}" r="6" fill="${i?'#9cbf73':'#2e5a35'}"/><text class="t-s" x="300" y="${46.5+i*33}" style="fill:#16140f">${c}</text>`});
+   return svg(540,200,`<text class="t-m" x="0" y="16">Integrantes</text>${b}${o}`,'Crecimiento y directiva')+`<figure style="margin-top:10px"><img src="img/wk_lectura.jpg" alt="Integrante practicando lectura y escritura" loading="lazy" style="aspect-ratio:16/10;object-fit:cover;object-position:50% 35%"><figcaption>Alfabetización: aprender a escribir el propio nombre y firmar documentos.</figcaption></figure><p style="font-size:15px;margin-top:12px;font-weight:700">Para seguir fortaleciéndose</p><div class="chips"><span>Matemáticas básicas</span><span>Lectura comprensiva</span><span>Administración</span><span>Liderazgo</span><span>Derechos de las mujeres</span><span>Gestión organizativa</span></div>`}},
+ wVivero:{vis(){return `<div class="duo"><figure><img src="img/wk_vivero.jpg" alt="Integrantes trabajando en el vivero comunal" loading="lazy" style="aspect-ratio:4/3;object-fit:cover"><figcaption>Vivero comunal de Chiaraje.</figcaption></figure><figure><img src="img/wk_cargando.jpg" alt="Mujeres cargan plantines de kewiña en aguayos" loading="lazy" style="aspect-ratio:4/3;object-fit:cover"><figcaption>Jornada de reforestación.</figcaption></figure></div>`}},
+ centro:{vis(){return `<figure><img src="img/wk_aereo.jpg" alt="Vista del Centro Warmi Kewiñas y el vivero en la ladera" loading="lazy" style="aspect-ratio:16/9;object-fit:cover"><figcaption>El Centro y el vivero, a 3.900 m.</figcaption></figure>`+svg(600,150,`<rect class="grow" x="0" y="30" width="${600*.637-2}" height="40" fill="#9a5b34"/><rect class="grow" x="${600*.637}" y="30" width="${600*.363}" height="40" fill="#cda65a" style="animation-delay:.2s"/><text class="t-m" x="0" y="20">GAM de Cocapata · 63,7%</text><text class="t-m" x="${600*.637}" y="20">FAUNAGUA · 36,3%</text><text class="t-s" x="0" y="92">Bs 158.757,45</text><text class="t-s" x="${600*.637}" y="92">Bs 90.480, fondos de Acción Andina</text><text class="t-b" x="0" y="140">Bs 249.237,45 <tspan class="t-s" style="font-family:DM Sans">(USD 35.809,98)</tspan></text>`,'Financiamiento de la obra')+`<div class="chips"><span>Salón y reuniones</span><span>Sala de capacitación</span><span>Sala cuna · por habilitar</span><span>Cocina · por habilitar</span></div>`}},
+ sostener:{vis(){return `<div class="rows">${[['Ventas','Salidas regulares solo si la demanda pagada cubre la operación; la continuidad se decide con ventas y costos reales.'],['Gestión','Antes del cierre se acuerda quién gestiona reservas, el Centro y el aporte al bosque.'],['Réplica','Se comparten comercialización y rendición de cuentas; cada territorio decide recorridos, cupos y reparto.'],['Permisos','Nota de compatibilidad con el PN Tunari (zona Z-5) por gestionar.']].map(r=>`<div style="grid-template-columns:110px 1fr"><b style="font-family:var(--disp);font-size:20px;color:#2e5a35">${r[0]}</b><div><span style="margin:0">${r[1]}</span></div></div>`).join('')}</div>`}}
+});
+
+/* ================= textos de los paneles: un solo nivel, cada visual se usa una sola vez ================= */
+const N={
+ /* 2 · por qué importa */
+ a:{k:'Chiaraje',t:'729 hectáreas en la vertiente norte del Tunari',n:'729',u:'ha de la comunidad, entre 3.500 y 4.600 m',p:'Chiaraje está en el paisaje «Tunari Norte», donde FAUNAGUA y Acción Andina restauran kewiña. El río Vizcachas marca su límite sur. La kewiña sobrevive en grietas y afloramientos rocosos, donde el ganado no llega; la vertiente norte de Cocapata aún conserva parches primarios.',s:'FAUNAGUA (2026), caracterización de bosques de P. pacensis en Chiaraje.',v:'perfil'},
+ b:{k:'Altitud',t:'Un bosque que vive donde casi ningún árbol llega',n:'5.200 m',u:'altura máxima del género Polylepis en los Andes',p:'Es el único bosque nativo de las grandes alturas, de Venezuela a Argentina. En el Tunari conviven cuatro especies de kewiña, cada una en su franja de altura, y la cumbre del parque (5.035 m) supera al Mont Blanc.',s:'Arrázola, Mercado y Aguirre (2010); Kew (2025); Boza y Kessler (2022).',v:'especies'},
+ c:{k:'Aves',t:'177 aves en los kewiñales del PN Tunari',n:'177',u:'especies; 10 solo existen en Bolivia',p:'El estudio de 2026 registró nueve aves y tres vizcachas en los relictos de Chiaraje. Estas son seis de ellas, fotografiadas en campo. Cada salida del piloto sumará registros como ciencia ciudadana.',s:'Investigación documental del proyecto; FAUNAGUA (2026); fotos del archivo del proyecto.',v:'avesGal'},
+ d:{k:'Agua',t:'Donde nace el agua de Cochabamba',n:'2.800',u:'litros por segundo distribuye Misicuni (eran 3.100)',p:'La neblina y la lluvia que capta el bosque se infiltran en un suelo esponjoso y bajan hacia los ríos. 2.800 L/s equivalen a unos 242 millones de litros al día para la región metropolitana.',s:'Empresa Misicuni (2023); UMSS (2026). Litros por día: cálculo propio.',v:'agua'},
+ e:{k:'Neblina y clima',t:'Un bosque que capta la neblina',n:'70–80%',u:'de humedad relativa en Chiaraje',p:'El interior del bosque suele quedar libre de heladas y su corteza en láminas aísla al árbol de variaciones de 20 a 30 °C entre el día y la noche. La estación Viscachas–Chiaraje registró en 2025 mínimas de hasta −8 °C.',s:'FAUNAGUA (2026); Arrázola, Mercado y Aguirre (2010).',v:'clima'},
+ f:{k:'Parque Nacional Tunari · KBA BOL32',t:'Diez especies amenazadas con fichas que citan el parque',n:'≈3.280',u:'km² de parque, de 1.800 a 5.035 m',p:'Área Clave de Biodiversidad y Área Importante para las Plantas (BOLTIPA085). El Libro Rojo de los Vertebrados de Bolivia 2026 cita el PN Tunari en las fichas de al menos diez especies En Peligro Crítico, En Peligro o Vulnerables.',s:'Kew (2025); Libro Rojo de los Vertebrados de Bolivia (2026).',v:'amenazadas'},
+ 'f-condor':{k:'Vulnerable · Libro Rojo 2026',t:'Cóndor andino',n:'30–49%',u:'de caída de su población en Bolivia',p:'Lo afectan la persecución, los perros ferales y los cebos envenenados; en 2025 hubo envenenamientos en Morochata, Cochabamba. Su ficha cita el PN Tunari. Es una de las especies emblemáticas de la experiencia de aviturismo.',s:'Libro Rojo de los Vertebrados de Bolivia (2026).'},
+ 'f-monterita':{k:'En Peligro · endémica de Bolivia',t:'Monterita cochabambina',n:'≈2.700',u:'individuos maduros en el mundo',p:'Vive en quebradas húmedas de 3.000 a 3.900 m. La afectan la pérdida de bosques de Polylepis, la leña, las quemas y la urbanización. Operadores de aviturismo como BirdQuest y DOF Travel llevan grupos al Tunari para verla.',s:'Libro Rojo (2026); itinerarios publicados de BirdQuest y DOF Travel.'},
+ 'f-taruka':{k:'En Peligro',t:'Taruka',p:'Venado andino de laderas rocosas que usa los bosquecillos de Polylepis como hábitat secundario. Su ficha cita el PN Tunari y la Reserva Incacasani–Altamachi.',s:'Libro Rojo de los Vertebrados de Bolivia (2026).'},
+ 'f-gato':{k:'En Peligro Crítico',t:'Gato andino',n:'70%',u:'de su dieta puede ser vizcacha',p:'Vive en laderas rocosas de la puna de Cochabamba sobre 3.800 m, con queñuas y bofedales. En Chiaraje se registraron tres vizcachas, su presa principal. El proyecto no afirma su presencia en Chiaraje.',s:'Libro Rojo (2026); FAUNAGUA (2026).'},
+ 'f-jucumari':{k:'Vulnerable',t:'¿Hay jucumari en Chiaraje?',p:'El oso andino recorre las laderas de Cochabamba. Su presencia en Chiaraje está por confirmar; los registros de fauna de las salidas pueden ayudar a confirmarla o descartarla.',s:'Libro Rojo de los Vertebrados de Bolivia (2026).',v:'jucumari'},
+
+ /* 3 · la kewiña */
+ copa:{k:'La copa',t:'Una kewiña al lado de una persona y una casa',n:'6,1 m',u:'altura media; el más alto medido llega a 11 m',p:'En el Área 1 la altura media es de 6,1 m, con un máximo de 11 m; en el Área 2, de 5,3 m con un máximo de 8 m. Todo esto a más de 3.500 m de altitud.',s:'FAUNAGUA (2026).',v:'altura'},
+ hojas:{k:'Las hojas y semillas',t:'Hay semilla local para restaurar',n:'84%',u:'de los árboles tenían fruto en enero de 2026',p:'Sus semillas se dispersan con el viento y florece en la época seca. El vivero comunal de Chiaraje, a 3.400 m, puede producir 100.000 plantines al año; otro vivero opera en Kumara, a 3.900 m.',s:'FAUNAGUA (2026); Arrázola, Mercado y Aguirre (2010).',v:'vivero'},
+ ramas:{k:'Las ramas',t:'Un bosque denso, de 559 a 720 árboles por hectárea',p:'En el Área 1 hay 43,5 m²/ha de área basal y 357,6 m³/ha de volumen (23,5 y 131,2 en el Área 2). Dentro, el bosque está poco degradado y es muy apto para aves.',s:'FAUNAGUA (2026).',v:'densidad'},
+ tronco:{k:'El tronco y la corteza',t:'Una corteza que funciona como abrigo',p:'La corteza rojiza se desprende en láminas delgadas que aíslan al árbol del frío. Cada árbol de las parcelas está numerado para volver a medirlo año tras año, y el visitante puede verlo sin entrar a zonas de protección.',s:'Arrázola, Mercado y Aguirre (2010); FAUNAGUA (2026).',v:'corteza'},
+ raices:{k:'Las raíces y el suelo',t:'Pesar un litro de suelo',n:'74,5%',u:'del suelo del kewiñal es materia orgánica',p:'Un suelo liviano y poroso guarda agua entre sus poros como una esponja. Por eso el bosque frena la erosión y reduce los deslizamientos.',s:'Laboratorio de Suelos y Aguas, UMSS (2026).',v:'esponja'},
+ suelo:{k:'El suelo',t:'Lo que dijo el laboratorio',p:'Las muestras de los relictos se analizaron en el Laboratorio de Suelos y Aguas de la Universidad Mayor de San Simón.',s:'UMSS (2026), en FAUNAGUA (2026).',v:'suelolab'},
+
+ /* 4 · problema y oportunidad */
+ fuego:{k:'Fuego',t:'430 hectáreas frente al tamaño de Chiaraje',n:'+430 ha',u:'ardieron en el PN Tunari en 2025',p:'Las quemas anuales de pajonal se hacen para que rebrote el pasto y a veces se escapan hacia los relictos. Solo en 2025 ardió una superficie equivalente a casi el 60% de Chiaraje.',s:'Mongabay (2026); FAUNAGUA (2026). Proporción: cálculo propio.',v:'incendio'},
+ ganado:{k:'Ganado',t:'Brotes que no llegan a árbol joven',n:'21 y 9',u:'brotes en las dos parcelas',p:'Vacas, ovejas y camélidos se comen los brotes apenas superan 5 cm. Proteger micrositios y cercar temporalmente ayuda a que los jóvenes lleguen a adultos.',s:'FAUNAGUA (2026).',v:'regeneracion'},
+ hacha:{k:'Leña y carbón',t:'Cinco árboles sostienen el bosque',n:'63,7%',u:'del área basal está en 5 de 19 árboles',p:'La tala selectiva para leña y carbón, por el alto poder calorífico de su madera, se lleva los árboles grandes. En el Área 1 esos cinco ejemplares concentran también el 75,6% del volumen: si se pierden, el dosel colapsa.',s:'FAUNAGUA (2026).',v:'cinco'},
+ 'o-estado':{k:'Mapa de conservación',t:'Dónde está la oportunidad',n:'61,2%',u:'de Chiaraje es pajonal con kewiñas sueltas',p:'Cada estado tiene su estrategia: proteger lo denso, enriquecer lo disperso, plantar núcleos en el pajonal y regular el pastoreo donde hay cultivos.',s:'Delgado O. (2026), FAUNAGUA–ECOAN.',v:'mapa'},
+ 'o-demanda':{k:'El mercado turístico',t:'Un mercado grande y un destino aún vacío',n:'3,18 M',u:'turistas nacionales, enero a octubre de 2024',p:'Unos 122 visitantes llegaron a todo Cocapata entre 2016 y 2020: cerca de dos al mes. Por eso el piloto vende salidas reales y calcula el punto de equilibrio de cada experiencia antes de crecer.',s:'Viceministerio de Turismo (2024); PTDI de Cocapata.',v:'mercado'},
+ 'o-base':{k:'Lo que ya existe',t:'Un bosque ya medido, árbol por árbol',p:'El Centro Warmi Kewiñas se inauguró el 10 de agosto de 2026, el vivero produce y el bosque tiene línea base propia. Pocas propuestas llegan con una línea base ecológica: esta permite medir si el piloto mejora el bosque.',s:'FAUNAGUA (2026).',v:'estudio'},
+
+ /* 5 · la propuesta */
+ obj1:{k:'Objetivo específico 1',t:'Restauración y protección comunitaria del bosque',n:'≥1',u:'acción prioritaria pagada con ingresos turísticos',p:'La comunidad elige la acción con FAUNAGUA; se aplica con el aporte de las salidas y se verifica en campo. Dos parcelas permanentes siguen la regeneración natural y la condición del bosque.',s:'Nota conceptual, sección 4.',v:'acciones'},
+ obj2:{k:'Objetivo específico 2',t:'Nuevos ingresos y liderazgo de las Warmi Kewiñas',n:'≥2',u:'salidas pagadas por experiencia',p:'Las familias prestan y cobran los servicios de cada salida. Los ingresos se registran por hogar, junto con la participación de mujeres y jóvenes.',s:'Nota conceptual, sección 4.',v:'servicios'},
+ obj3:{k:'Objetivo específico 3',t:'Condiciones para sostener y ampliar el modelo',p:'Al cierre se conocen la demanda efectiva, el punto de equilibrio y la capacidad de reinversión; la comunidad decide qué continúa y se evalúa al menos una comunidad vecina, Icari primero.',s:'Nota conceptual, secciones 4 y 9.',v:'replica'},
+
+ /* 6 · mecanismo */
+ fam:{k:'55% · familias',t:'Cómo se reparten €100 de tarifa',p:'Pagos por guiado, cocina, transporte y alojamiento, registrados por hogar. Es una propuesta inicial que se validará con la comunidad.',s:'Anexo 1; FONABOSQUE.',v:'reparto'},
+ bos:{k:'25% · bosque',t:'El ciclo de reinversión',p:'El aporte se aplica a una acción prioritaria elegida con la comunidad y se verifica en campo. La meta del piloto es completar y verificar al menos un ciclo.',s:'Anexo 1.',v:'ciclo'},
+ com:{k:'20% · comercialización',t:'Por dónde llegan los visitantes',p:'HOWWE promociona y vende las dos experiencias por canales directos y con operadores, y registra qué canal funciona.',s:'Anexo 1; itinerarios publicados de BirdQuest y DOF Travel.',v:'canales'},
+
+ /* 7 · oferta */
+ 'o-restaura':{k:'Experiencia 1',t:'Ver la restauración de cerca',p:'Los relictos del estudio, Incachaca y Pilliluwaychu, están también en el inventario turístico. El visitante recorre el vivero y los árboles numerados sin entrar a las zonas de protección estricta.',s:'FAUNAGUA (2026); Ficha de atractivos (2024).',v:'parcelas'},
+ 'o-atractivos':{k:'Inventario 2024',t:'Trece atractivos inventariados',n:'13',u:'7 naturales, 1 arqueológico y 5 de cultura viva',p:'Lagunas, cascadas, el río Incachaca, los relictos de kewiña, pinturas rupestres, fiestas y ferias.',s:'Ficha de atractivos (2024).',v:'atractivos'},
+
+ /* 10 · resultados */
+ 'r-salidas':{k:'Resultado 1',t:'Cuatro salidas pagadas',n:'4',u:'2 por experiencia, con costos reales',p:'Cada salida registra reservas, ocupación, costos y pagos. Con ellas se calcula el punto de equilibrio de cada experiencia y se ajustan tarifas, cupos y canales.',s:'Nota conceptual, sección 4.',v:'salidas'},
+ 'r-ciclo':{k:'Resultado 3',t:'Un ciclo completo de reinversión',p:'Se documentan el monto recaudado en las salidas, cómo se administró, en qué se aplicó y la verificación en campo de la acción.',s:'Nota conceptual, sección 4.',v:'cicloTres'},
+ 'r-parcelas':{k:'Resultado 5',t:'Señales de salud que se vigilan',n:'2',u:'parcelas permanentes en Incachaca',p:'El Área 2 está más estresada: 20% de árboles en mal estado, 10% muertos y 13 registros de hongos. Las parcelas permiten ver si eso cambia.',s:'FAUNAGUA (2026).',v:'sanidad'},
+
+ /* 11 · Warmi Kewiñas */
+ 'w-org':{k:'Organización de mujeres de Chiaraje',t:'De 10 a 25 mujeres desde 2022',n:'25',u:'integrantes de 18 a 68 años, todas de la comunidad',p:'Se conformaron en octubre de 2022 con 10 mujeres para cuidar el ambiente, conservar los bosques nativos de kewiña y fortalecer la participación de las mujeres. Con actividades de alfabetización, varias aprendieron a leer, escribir y firmar documentos por sí mismas.',s:'Warmi Kewiñas, documento de conformación (2026).',v:'wOrg'},
+ 'w-vivero':{k:'Vivero y reforestación',t:'Manos que producen y plantan kewiña',n:'100.000',u:'plantines al año en el vivero comunal, a 3.400 m',p:'Desde sus inicios se capacitaron en producción, manejo y cuidado de viveros forestales, y participan en jornadas de reforestación y conservación de los bosques nativos de kewiña. En invierno trabajan con heladas de hasta −4 °C.',s:'Warmi Kewiñas (2026); FAUNAGUA (2026).',v:'wVivero'},
+ 'w-centro':{k:'Centro Integral Ecoturístico Warmi Kewiñas',t:'Una casa con su nombre',p:'Inaugurado el 10 de agosto de 2026 a 3.900 m, para capacitación, reuniones, atención y servicios comunitarios, y como apoyo al turismo comunitario. La sala cuna y la cocina aún deben habilitarse: necesitan equipamiento, capacitación y responsables. El piloto no construye: adecua y pone a funcionar lo que ya existe.',s:'Convenio GAM de Cocapata–FAUNAGUA (2025); Warmi Kewiñas (2026).',v:'centro'},
+ 'w-decide':{k:'Su liderazgo en el piloto',t:'Lo que deciden las Warmi Kewiñas',p:'Lideran el componente comunitario. Habilitar la sala cuna del Centro es una de las medidas para que las mujeres participen sin sobrecarga.',s:'Anexo 1; Nota conceptual, sección 7.',v:'decisiones'},
+
+ /* 12 · alianza */
+ comunidades:{k:'Comunidades del paisaje',t:'119.000 plantines en cinco comunidades',p:'Cinco comunidades firmaron actas en 2026 para la campaña 2026–2027. Cada círculo del dibujo representa 1.000 plantines.',s:'Actas comunales 2026.',v:'actas'},
+ 'g-roles':{k:'Gobernanza',t:'Quién hace qué',p:'Una sola entidad firma y responde ante CAF; cada aliado lidera los pasos en los que tiene experiencia.',s:'Anexo 1.',v:'roles'},
+
+ /* 13 · garantías */
+ 'q-verif':{k:'Verificación',t:'Qué se registra en cada salida',p:'Con estos registros se ajustan tarifas, cupos y canales, y la comunidad recibe informes periódicos de pagos, monto reservado y acciones realizadas.',s:'Nota conceptual, secciones 5 y 9.',v:'registro'},
+ 'q-riesgos':{k:'Riesgos',t:'Cinco riesgos y cómo se manejan',p:'Si el monitoreo muestra daño, se reducen cupos o se cambian recorridos antes de seguir.',s:'Nota conceptual, sección 7.',v:'riesgos'},
+ 'q-cofin':{k:'Cofinanciamiento',t:'Lo que ya existe y suma al piloto',p:'Son aportes complementarios documentados, no fondos que se piden a CAF.',s:'Convenio GAM–FAUNAGUA; actas 2026; FAUNAGUA (2026).',v:'aportes'},
+ 'q-sost':{k:'Sostenibilidad',t:'Qué pasa después de 2028',p:'La continuidad se decide con ventas y costos reales, no con supuestos.',s:'Nota conceptual, sección 9.',v:'sostener'},
+
+ /* 14 · escala */
+};
+
+
+/* ================= panel de un nivel: junto al punto, flotante y arrastrable ================= */
+const panel=$('#panel'),lead=$('#lead');let pKey=null,pEl=null,moved=false;
+const small=()=>innerWidth<=700;
+function openPanel(key,el){const n=N[key];if(!n)return;if(pKey===key&&panel.classList.contains('open')){closePanel();return}
+  pKey=key;pEl=el;moved=false;let vis='';try{if(n.v&&D[n.v])vis=`<div class="vis">${D[n.v].vis()}</div>`}catch(e){console.warn(e)}
+  panel.innerHTML=`<div class="grab" title="Arrastrar"><i></i></div><button class="close" aria-label="Cerrar">${X}</button><div class="phead"><div class="pk">${n.k}</div><h3 id="panelT">${n.t}</h3></div>${n.n?`<div class="pn"><span class="num">${n.n}</span><span>${n.u||''}</span></div>`:''}<p>${n.p}</p>${vis}<div class="ps">${n.s||''}</div>`;
+  $('.close',panel).onclick=closePanel;panel.scrollTop=0;
+  position();panel.classList.add('open');requestAnimationFrame(()=>{position();place()});}
+function position(){if(!pEl)return;if(small()){panel.style.left=panel.style.top='';return}
+  const r=pEl.getBoundingClientRect(),pw=panel.offsetWidth,ph=panel.offsetHeight,m=16,g=22,top0=70,W=innerWidth,H=innerHeight;
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;let x,y;
+  const clampY=v=>Math.max(top0,Math.min(H-ph-m,v)),clampX=v=>Math.max(m,Math.min(W-pw-m,v));
+  if(W-r.right-g-m>=pw){x=r.right+g;y=clampY(cy-ph*.35)}
+  else if(r.left-g-m>=pw){x=r.left-g-pw;y=clampY(cy-ph*.35)}
+  else if(H-r.bottom-g-m>=ph){y=r.bottom+g;x=clampX(cx-pw/2)}
+  else if(r.top-g-top0>=ph){y=r.top-g-ph;x=clampX(cx-pw/2)}
+  else{ /* no cabe al lado: se apoya en el lado con más espacio, solapando lo mínimo */
+    x=cx<W/2?clampX(Math.min(r.right+g,W-pw-m)):clampX(Math.max(r.left-g-pw,m));y=clampY(cy-ph*.35)}
+  panel.style.left=x+'px';panel.style.top=y+'px';panel.style.setProperty('--ox',(cx-x)+'px');panel.style.setProperty('--oy',(cy-y)+'px');}
+function place(){if(!pEl||!panel.classList.contains('open')||small()){lead.innerHTML='';return}
+  const r=pEl.getBoundingClientRect(),pr=panel.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  if(cx>pr.left&&cx<pr.right&&cy>pr.top&&cy<pr.bottom){lead.innerHTML='';return}
+  /* línea corta: del borde del elemento al borde del panel */
+  const C=(v,a,b)=>Math.max(a,Math.min(b,v)),big=r.width>140||r.height>140,pcx=(pr.left+pr.right)/2,pcy=(pr.top+pr.bottom)/2;
+  const sx=big?C(pcx,r.left+8,r.right-8):cx,sy=big?C(pcy,r.top+8,r.bottom-8):cy;
+  const ex=C(sx,pr.left,pr.right),ey=C(sy,pr.top+24,pr.bottom-24);
+  lead.innerHTML=`<line x1="${sx}" y1="${sy}" x2="${ex}" y2="${ey}"/><circle class="ring" cx="${sx}" cy="${sy}" r="7"/><circle cx="${sx}" cy="${sy}" r="3"/><circle cx="${ex}" cy="${ey}" r="3"/>`;}
+function closePanel(){panel.classList.remove('open');pKey=null;pEl=null;lead.innerHTML=''}
+/* arrastrar desde la barra o el título */
+(function(){let d=null;
+  panel.addEventListener('pointerdown',e=>{if(small()||!e.target.closest('.grab,.phead'))return;const pr=panel.getBoundingClientRect();d={dx:e.clientX-pr.left,dy:e.clientY-pr.top};panel.setPointerCapture(e.pointerId);panel.classList.add('dragging');e.preventDefault()});
+  panel.addEventListener('pointermove',e=>{if(!d)return;const pw=panel.offsetWidth,ph=panel.offsetHeight;const x=Math.max(8,Math.min(innerWidth-pw-8,e.clientX-d.dx)),y=Math.max(8,Math.min(Math.max(8,innerHeight-ph-8),e.clientY-d.dy));panel.style.left=x+'px';panel.style.top=y+'px';moved=true;place()});
+  const up=()=>{if(d){d=null;panel.classList.remove('dragging')}};panel.addEventListener('pointerup',up);panel.addEventListener('pointercancel',up);})();
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-note],[data-hl]');
+  if(t&&!t.closest('.panel')&&!t.closest('.dd')){const k=t.dataset.note||t.dataset.hl;if(N[k]){e.stopPropagation();if(t.dataset.hl)lit(t);openPanel(k,t);return}}
+  if(panel.classList.contains('open')&&!e.target.closest('.panel'))closePanel();});
+addEventListener('resize',()=>{if(!moved)position();place()});$$('.inner').forEach(i=>i.addEventListener('scroll',place,{passive:true}));
+/* si el contenido crece (imágenes que cargan), el panel se reacomoda para no salir de la pantalla */
+new ResizeObserver(()=>{if(!panel.classList.contains('open')||small())return;if(!moved)position();else{const pr=panel.getBoundingClientRect();if(pr.bottom>innerHeight-12)panel.style.top=Math.max(12,innerHeight-12-pr.height)+'px'}place()}).observe(panel);
+
+
+/* ================= 2 · bloque isométrico ================= */
+(function(){
+  const S=$('#isoSvg');const L=[110,330],T=[450,165],R=[790,330],B=[450,495],H=74;
+  const jit=(a,b,n,amp,seed)=>{const p=[];for(let i=0;i<=n;i++){const t=i/n;const j=i&&i<n?Math.sin(i*1.7+seed)*amp:0;p.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t+j])}return p};
+  const eL=jit(L,B,9,4,1),eR=jit(B,R,9,4,2);
+  const pts=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const face=(edge,d0,d1)=>{const top=edge.map(p=>[p[0],p[1]+d0]),bot=edge.map(p=>[p[0],p[1]+d1]).reverse();return pts(top.concat(bot))};
+  const strata=(edge,shade)=>[[0,16,'#4a3222'],[16,38,'#7a5236'],[38,58,'#a07b57'],[58,H,'#c3a07a']].map(s=>`<polygon points="${face(edge,s[0],s[1])}" fill="${s[2]}" ${shade?'style="filter:brightness(.86)"':''}/>`).join('');
+  const topEdge=[L].concat(jit(L,T,6,3,3).slice(1),jit(T,R,6,3,4).slice(1),eR.slice().reverse().slice(1),eL.slice().reverse().slice(1));
+  let s=`<defs>
+   <linearGradient id="gTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9bf86"/><stop offset=".55" stop-color="#c9a764"/><stop offset="1" stop-color="#b48c4c"/></linearGradient>
+   <linearGradient id="gRock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a99a86"/><stop offset="1" stop-color="#7d6e5c"/></linearGradient>
+   <linearGradient id="gRock2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f806c"/><stop offset="1" stop-color="#6b5d4c"/></linearGradient>
+   <radialGradient id="gLake" cx=".4" cy=".4"><stop offset="0" stop-color="#7fa6b8"/><stop offset="1" stop-color="#3f6a80"/></radialGradient>
+   <filter id="blur"><feGaussianBlur stdDeviation="6"/></filter>
+   <pattern id="grassI" width="12" height="8" patternUnits="userSpaceOnUse"><path d="M2 8l1-4M7 8l1-5" stroke="#a88a4e" stroke-width=".8"/></pattern>
+  </defs>
+  <ellipse cx="450" cy="560" rx="380" ry="40" fill="rgba(90,50,20,.18)" filter="url(#blur)"/>
+  ${strata(eL,false)}${strata(eR,true)}
+  <polygon points="${pts(topEdge)}" fill="url(#gTop)"/><polygon points="${pts(topEdge)}" fill="url(#grassI)" opacity=".7"/>`;
+  // cordillera al fondo
+  s+=`<path d="M128 322 L170 250 L205 270 L250 190 L290 225 L330 150 L372 196 L420 112 L450 165 L120 330Z" fill="url(#gRock)"/>
+      <path d="M450 165 L480 120 L520 168 L560 130 L610 196 L650 176 L700 240 L740 230 L790 330 L450 165Z" fill="url(#gRock2)"/>
+      <path d="M420 112 L436 136 L428 150 L446 160" stroke="#f3ede2" stroke-width="3" fill="none" opacity=".7"/>`;
+  // relieve: curvas de nivel sobre la superficie
+  for(let i=1;i<5;i++){const k=i/5;s+=`<path d="M${150+60*k} ${340-20*k} Q ${450} ${230+40*k} ${760-50*k} ${335-15*k}" fill="none" stroke="rgba(90,60,30,.18)" stroke-width="1"/>`}
+  // parches de bosque (relictos)
+  s+=`<path d="M210 360 Q260 320 330 330 Q360 356 320 380 Q260 400 210 360Z" fill="#7d8a55" opacity=".55"/>
+      <path d="M560 380 Q610 350 670 362 Q700 384 650 404 Q590 418 560 380Z" fill="#7d8a55" opacity=".5"/>`;
+  // laguna y arroyo que cae en cascada
+  s+=`<g data-hl="d"><ellipse cx="520" cy="282" rx="72" ry="28" fill="url(#gLake)" stroke="#2f5568" stroke-width="1"/>
+      <path d="M560 300 C590 330 610 360 640 386 C660 404 680 420 700 433" stroke="#3f6a80" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path class="fall" d="M701 436 L703 505" stroke="#7fa6b8" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path class="fall" d="M709 432 L711 500" stroke="#bcd3dd" stroke-width="3" fill="none" stroke-linecap="round" style="animation-delay:-.5s"/>
+      <ellipse cx="706" cy="512" rx="16" ry="5" fill="#bcd3dd" opacity=".8"/></g>`;
+  // árboles: relictos
+  const TR=[[220,360],[238,350],[256,366],[275,342],[292,360],[312,350],[300,378],[262,382],[330,364],[245,334],[575,384],[594,372],[612,392],[630,378],[652,392],[670,376],[640,404],[603,404],[420,300],[440,292],[395,312],[700,350],[720,362]];
+  s+=`<g data-hl="c">`+TR.sort((a,b)=>a[1]-b[1]).map(p=>tree(p[0],p[1],38)).join('')+`</g>`;
+  // Centro Warmi Kewiñas
+  s+=`<g transform="translate(470 380)"><polygon points="0,0 26,-13 52,0 26,13" fill="#d5c2a3"/><polygon points="0,0 26,13 26,33 0,20" fill="#b89d78"/><polygon points="26,13 52,0 52,20 26,33" fill="#a1855f"/><polygon points="-3,0 26,-20 55,0 26,14" fill="#7a3b22"/></g>`;
+  // nubes
+  s+=`<g class="drift"><ellipse cx="300" cy="140" rx="90" ry="20" fill="#fff" opacity=".35" filter="url(#blur)"/></g><g class="drift b"><ellipse cx="640" cy="160" rx="110" ry="22" fill="#fff" opacity=".3" filter="url(#blur)"/></g>`;
+  // marcadores numerados
+  const MK=[['a',190,420,'1'],['b',300,215,'2'],['c',290,345,'3'],['d',520,282,'4'],['e',640,150,'5'],['f',800,250,'6']];
+  s+=MK.map(m=>`<g class="mk" data-hl="${m[0]}"><circle class="halo" cx="${m[1]}" cy="${m[2]}" r="22"/><circle cx="${m[1]}" cy="${m[2]}" r="14"/><text x="${m[1]}" y="${m[2]+4.5}" text-anchor="middle">${m[3]}</text></g>`).join('');
+  s+=`<path d="M786 254 L760 300" stroke="#f4e9da" stroke-dasharray="3 3"/><text x="660" y="600" font-family="DM Sans" font-size="13" fill="rgba(244,233,218,.55)">Esquema ilustrativo, no a escala</text>`;
+  S.innerHTML=s;
+})();
+
+
+
+
+
+
+/* ================= 7 · calendario ================= */
+(function(){const S=$('#calSvg');const M=['E','F','M','A','M','J','J','A','S','O','N','D'],x=m=>110+m*44;
+  const band=(y,a,b,c,l)=>{let r=`<text x="0" y="${y+12}" font-size="13" fill="rgba(241,242,236,.78)" font-family="DM Sans">${l}</text>`;const seg=(s,e)=>r+=`<rect class="grow" x="${x(s)}" y="${y}" width="${x(e+1)-x(s)-3}" height="16" rx="5" fill="${c}"/>`;if(a<=b)seg(a,b);else{seg(a,11);seg(0,b)}return r};
+  let s=M.map((m,i)=>`<text x="${x(i)+20}" y="14" text-anchor="middle" font-size="12" font-weight="700" fill="rgba(241,242,236,.6)" font-family="DM Sans">${m}</text>`).join('');
+  s+=band(26,3,10,'#8fc4d6','Aves')+band(50,11,1,'#9cbf73','Siembra')+band(74,4,4,'#e0bc68','Semillas')+band(98,5,7,'rgba(241,242,236,.45)','Vivero');
+  [[4.85,'27 may'],[7.03,'2 ago · fiesta de Chiaraje'],[11.5,'16 dic']].forEach((f,i)=>{const xx=110+f[0]*44;s+=`<line x1="${xx}" x2="${xx}" y1="22" y2="${136+(i%2)*14}" stroke="#d08b57" stroke-width="1.5"/><circle cx="${xx}" cy="${136+(i%2)*14}" r="4" fill="#d08b57"/><text x="${f[0]>9?xx-8:xx+8}" y="${140+(i%2)*14}" text-anchor="${f[0]>9?'end':'start'}" font-size="12.5" fill="#f1f2ec" font-family="DM Sans">${f[1]}</text>`});
+  s+=`<text x="0" y="146" font-size="13" fill="rgba(241,242,236,.78)" font-family="DM Sans">Fiestas</text>`;
+  S.innerHTML=s;})();
+
+/* ================= 9 · presupuesto sutil ================= */
+(function(){const B=$('#budget');const R=[['Estudio de consultoría',35000,'#e0bc68'],['Pilotaje y comercialización',20000,'#9cbf73'],['Coordinación y seguimiento',20000,'#b8b2a2'],['Adecuaciones del Centro',12000,'#c3d99d'],['Formación',5000,'#8fc4d6'],['Monitoreo',3000,'#d08b57']];
+  B.innerHTML=`<div class="lbl"><span>Uso de los fondos solicitados a CAF, en seis rubros</span><b>€95.000</b></div><div class="bars">${R.map(r=>`<div style="flex:${r[1]};background:${r[2]}">${r[1]>=12000?'€'+fmt(r[1]/1000)+'k':''}</div>`).join('')}</div><div class="names">${R.map(r=>`<span style="flex:${r[1]}">${r[1]>=12000?r[0]:''}</span>`).join('')}</div>`;})();
+
+/* ================= 6 · diez árboles ================= */
+const ten=$('#ten');for(let i=0;i<10;i++)ten.insertAdjacentHTML('beforeend',`<svg viewBox="0 0 40 60"><use href="#kw"/></svg>`);
+function tenTrees(){const T=[...ten.children];T.forEach(t=>{t.classList.remove('gone');t.innerHTML='<use href="#kw"/>'});T.slice(1).forEach((t,k)=>setTimeout(()=>{t.classList.add('gone');t.innerHTML='<use href="#kw0"/>'},RM?0:700+k*160))}
+
+
+
+/* ================= 8 · sankey de la tarifa ================= */
+(function(){const S=$('#sankeySvg');
+  const x0=60,x1=330,x2=560,top=90,Ht=300; // 100% = 300px
+  const parts=[['fam',55,'#e2b25f','Familias','servicios de guías, cocina, transporte y alojamiento'],['bos',25,'#a9b783','Bosque','fondo para la acción prioritaria'],['com',20,'#b6a892','Comercialización','promoción y venta']];
+  let s=`<text class="t-s" x="${x0}" y="${top-50}">Cada visita</text><text class="t-b" x="${x0}" y="${top-14}" fill="#f4e9da">100%</text><text class="t-s" x="${x0+122}" y="${top-14}">de la tarifa</text>`;
+  s+=`<rect x="${x0}" y="${top}" width="34" height="${Ht}" fill="#e2b25f" rx="3"/>`;
+  let yy=top,yo=top-30;
+  parts.forEach((p,i)=>{const h=Ht*p[1]/100,ty=yo;yo+=h+38;
+    s+=`<g class="st" data-hl="${p[0]}"><path d="M${x0+34} ${yy} C${x0+170} ${yy} ${x1-140} ${ty} ${x1} ${ty} L${x1} ${ty+h} C${x1-140} ${ty+h} ${x0+170} ${yy+h} ${x0+34} ${yy+h}Z" fill="${p[2]}" opacity=".78"/>
+      <rect x="${x1}" y="${ty}" width="14" height="${h}" fill="${p[2]}"/>
+      <text class="t-b" x="${x1+26}" y="${ty+30}" fill="${p[2]}">${p[1]}%</text><text class="t-m" x="${x1+26}" y="${ty+52}">${p[3]}</text><text class="t-s" x="${x1+26}" y="${ty+70}">${p[4]}</text></g>`;
+    p.push(ty,h);yy+=h;});
+  // el bosque continúa: acción verificada → kewiñas
+  const b=parts[1],by=b[5],bh=b[6];
+  s+=`<g class="st" data-hl="bos"><path d="M${x1+14} ${by+bh} C${x1+60} ${by+bh+60} ${x2-80} 470 ${x2} 470 L${x2} 490 C${x2-60} 490 ${x1+40} ${by+bh+80} ${x1+14} ${by+bh+20}Z" fill="#a9b783" opacity=".35"/>
+      <text class="t-m" x="${x2+10}" y="476">Acción en el bosque, verificada</text><text class="t-s" x="${x2+10}" y="494">€25 de cada €100 ≈ 29 kewiñas</text>`;
+  for(let i=0;i<29;i++)s+=tree(x2+16+(i%10)*17,520+Math.floor(i/10)*0,22);
+  s+=`</g>`;
+  s+=`<defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#a9b783"/></marker></defs><path d="M${x2+190} 455 C${x2+200} 300 ${x2+200} 40 ${x2+120} 30 L${x0+70} 30" fill="none" stroke="#a9b783" stroke-width="1.5" stroke-dasharray="4 6" marker-end="url(#ah)"/><text class="t-s" x="${x0+200}" y="20">y el ciclo vuelve: más bosque, mejor experiencia</text>`;
+  S.innerHTML=s;$('#sankey').classList.add('hlbox');})();
+
+
+
+/* ================= 10 · el camino con vehículo arrastrable ================= */
+const road=(function(){const S=$('#roadSvg');const y=a=>380-(a-2400)*.14;
+  const X=t=>70+t/5*1060;const STOPS=[[0,'Cochabamba','aeropuerto, 2.570 m',356],[1.5,'Quillacollo','',352],[2.5,'Peñas','',120],[4,'Colquechaca','',178],[5,'Chiaraje','Centro Warmi Kewiñas, 3.900 m',170]];
+  const d=`M70 356 C200 356 300 355 388 352 C430 350 455 140 494 86 C520 60 560 92 600 120 C700 150 820 176 918 178 C1000 178 1080 172 1130 170`;
+  let s=`<defs><linearGradient id="rf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c48f3a" stop-opacity=".45"/><stop offset="1" stop-color="#c48f3a" stop-opacity=".05"/></linearGradient>
+     <clipPath id="rc"><rect id="rcr" x="0" y="0" width="70" height="430"/></clipPath></defs>`;
+  // franjas de altitud
+  const bands=[[2400,3000,'rgba(224,188,104,.14)','Valles · bajo 3.000 m'],[3000,4000,'rgba(156,191,115,.14)','Pisos de altura · 3.000–4.000 m'],[4000,4800,'rgba(143,196,214,.12)','Cumbres · sobre 4.000 m']];
+  bands.forEach(b=>{s+=`<rect x="60" y="${y(b[1])}" width="1090" height="${y(b[0])-y(b[1])}" fill="${b[2]}"/><text x="1146" y="${y(b[1])+16}" text-anchor="end" font-size="12" fill="rgba(244,233,218,.6)">${b[3]}</text>`});
+  [[2570,'2.570 m'],[3900,'3.900 m'],[4500,'≈4.500 m']].forEach(a=>{s+=`<line x1="60" x2="1150" y1="${y(a[0])}" y2="${y(a[0])}" stroke="rgba(244,233,218,.18)" stroke-dasharray="2 5"/><text x="56" y="${y(a[0])+4}" text-anchor="end" font-size="12" fill="rgba(244,233,218,.6)">${a[1]}</text>`});
+  // regiones (áreas)
+  [[70,494,'Valle de Cochabamba'],[494,620,'Cordillera'],[620,1130,'Vertiente norte · Cocapata']].forEach(r=>{s+=`<line x1="${r[0]}" x2="${r[0]}" y1="40" y2="398" stroke="rgba(244,233,218,.12)"/><text x="${(r[0]+r[1])/2}" y="420" text-anchor="middle" font-size="12.5" font-weight="700" fill="rgba(244,233,218,.7)">${r[2]}</text>`});
+  s+=`<path d="${d} L1130 398 L70 398Z" fill="url(#rf)"/>`;
+  s+=`<path d="${d} L1130 398 L70 398Z" fill="rgba(156,191,115,.3)" clip-path="url(#rc)"/>`;
+  s+=`<path id="rpath" d="${d}" fill="none" stroke="transparent"/>`;
+  s+=`<path d="M70 356 C200 356 300 355 388 352 C430 350 455 140 494 86 C520 60 560 92 600 120" stroke="#f4e9da" stroke-width="3.5" fill="none"/>`;
+  s+=`<path d="M600 120 C700 150 820 176 918 178" stroke="#b6a892" stroke-width="3.5" stroke-dasharray="10 6" fill="none"/>`;
+  s+=`<path d="M918 178 C1000 178 1080 172 1130 170" stroke="#e0bc68" stroke-width="3.5" stroke-dasharray="2 7" stroke-linecap="round" fill="none"/>`;
+  STOPS.forEach((p,i)=>{const x=X(p[0]);s+=`<circle cx="${x}" cy="${p[3]}" r="7" fill="#1d130e" stroke="#f4e9da" stroke-width="2.5"/><text x="${x+(i===4?-10:10)}" y="${p[3]-(i===0||i===1?16:16)}" text-anchor="${i===4?'end':'start'}" font-size="15" font-weight="700" fill="#f4e9da">${p[1]}</text>${p[2]?`<text x="${x+(i===4?-10:10)}" y="${p[3]+(i===0?28:-34)}" text-anchor="${i===4?'end':'start'}" font-size="12" fill="rgba(244,233,218,.65)">${p[2]}</text>`:''}`});
+  s+=`<g><circle cx="494" cy="86" r="5" fill="#f4e9da"/><text x="484" y="72" text-anchor="end" font-size="13" font-weight="700" fill="#f4e9da">Cumbre ≈4.500 m</text></g>`;
+  s+=`<g class="car" id="car" tabindex="0" role="slider" aria-label="Vehículo: arrastra para recorrer el camino" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0">
+      <circle r="30" fill="rgba(224,188,104,.15)"/><g transform="translate(-20,-22)"><path d="M3 14h34l-3-7c-1-2-2-3-4-3H12c-2 0-3 1-4 3z" fill="#e0bc68"/><rect x="1" y="13" width="38" height="9" rx="3" fill="#e0bc68"/><rect x="12" y="6" width="7" height="6" fill="#f2e6d4"/><rect x="22" y="6" width="7" height="6" fill="#f2e6d4"/><circle cx="10" cy="23" r="4.5" fill="#1d130e" stroke="#f4e9da"/><circle cx="30" cy="23" r="4.5" fill="#1d130e" stroke="#f4e9da"/></g></g>`;
+  S.innerHTML=s;
+  const path=$('#rpath',S),car=$('#car',S),L=path.getTotalLength();
+  // tabla x → punto (el perfil es monótono en x)
+  const tab=[];for(let i=0;i<=600;i++){const p=path.getPointAtLength(L*i/600);tab.push([p.x,p.y])}
+  const atX=x=>{x=Math.max(70,Math.min(1130,x));let i=tab.findIndex(p=>p[0]>=x);if(i<=0)return tab[0];const a=tab[i-1],b=tab[i],k=(x-a[0])/((b[0]-a[0])||1);return [x,a[1]+(b[1]-a[1])*k,Math.atan2(b[1]-a[1],b[0]-a[0])]};
+  const SEG=[[0,1.5,'Tramo 1 · Cochabamba → Quillacollo','pavimento','Salida desde el valle, por la ciudad y su región metropolitana.'],[1.5,2.5,'Tramo 2 · Quillacollo → Peñas','pavimento','Subida a la cordillera del Tunari: se cruza la cumbre a unos 4.500 m.'],[2.5,4,'Tramo 3 · Peñas → Colquechaca','empedrado','Descenso por la vertiente norte, entre pajonales y roquedales.'],[4,5,'Tramo 4 · Colquechaca → Chiaraje','ripio','Último tramo hasta el Centro Warmi Kewiñas, a 3.900 m.']];
+  function set(x){const p=atX(x);car.setAttribute('transform',`translate(${p[0].toFixed(1)} ${p[1].toFixed(1)}) rotate(${((p[2]||0)*57.3*.6).toFixed(1)})`);$('#rcr',S).setAttribute('width',p[0]);
+    const t=(p[0]-70)/1060*5,h=Math.floor(t),m=Math.round((t-h)*60)%60,hh=m===0&&t-h>.5?h+1:h;$('#clk').textContent=`${hh} h ${String(m).padStart(2,'0')}`;
+    const sg=SEG.find(g=>t>=g[0]&&t<=g[1]+1e-6)||SEG[0];$('#seg').innerHTML=t>=4.995?`<b>Llegada a Chiaraje</b> · 5 horas desde Cochabamba (3 a 5 h según el vehículo)<br>Centro Warmi Kewiñas, 3.900 m. El bosque, el vivero y las lagunas están a pie.`:`<b>${sg[2]}</b> · ${sg[3]}<br>${sg[4]}`;
+    car.setAttribute('aria-valuenow',Math.round(t*60));}
+  let drag=false;const toX=e=>{const r=S.getBoundingClientRect();return (e.clientX-r.left)/r.width*1200};
+  S.addEventListener('pointerdown',e=>{drag=true;S.setPointerCapture(e.pointerId);$('#road').classList.add('dragging');set(toX(e));e.preventDefault()});
+  S.addEventListener('pointermove',e=>{if(drag)set(toX(e))});
+  const end=()=>{drag=false;$('#road').classList.remove('dragging')};S.addEventListener('pointerup',end);S.addEventListener('pointercancel',end);
+  car.addEventListener('keydown',e=>{const cur=+car.getAttribute('aria-valuenow')/60*1060/5+70;if(e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();set(cur+26.5)}if(e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();set(cur-26.5)}});
+  set(70);
+  return {intro(){if(RM){set(1130);return}let x=70;const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1600);x=70+(388-70)*(1-Math.pow(1-k,3));set(x);if(k<1)requestAnimationFrame(f)})(t0)}};
+})();
+
+
+
+/* ================= 14 · anillos sobre el mapa real ================= */
+(function(){const S=$('#ringsMap');const C=[682,212];
+  const R=[['r5',0,'Andes'],['r4',0,'PN'],['r3',150],['r2',80],['r1',34]];
+  let s='';
+  s+=`<g class="rg" data-hl="r5"><rect x="6" y="6" width="1500" height="824" fill="none" stroke="#2e6b3f" stroke-width="3" stroke-dasharray="10 8"/><text x="24" y="40" font-family="DM Sans" font-size="26" font-weight="700" fill="#2e6b3f">5 · Andes de Bolivia</text></g>`;
+  s+=`<g class="rg" data-hl="r4"><circle cx="760" cy="420" r="0"/><path d="M820 470 L760 420" stroke="#1f4d2c" stroke-width="3"/><rect x="826" y="452" width="330" height="44" rx="6" fill="rgba(247,238,223,.92)"/><text x="840" y="482" font-family="DM Sans" font-size="23" font-weight="700" fill="#1f4d2c">4 · PN Tunari (límite verde azulado)</text></g>`;
+  s+=`<g class="rg" data-hl="r3"><circle cx="${C[0]}" cy="${C[1]-40}" r="150" fill="rgba(46,107,63,.06)" stroke="#2e6b3f" stroke-width="3"/><text x="${C[0]-230}" y="${C[1]-120}" font-family="DM Sans" font-size="22" font-weight="700" fill="#1f4d2c">3 · Kumara</text></g>`;
+  s+=`<g class="rg" data-hl="r2"><circle cx="${C[0]+24}" cy="${C[1]-14}" r="74" fill="rgba(46,107,63,.08)" stroke="#2e6b3f" stroke-width="3"/><text x="${C[0]+104}" y="${C[1]+20}" font-family="DM Sans" font-size="22" font-weight="700" fill="#1f4d2c">2 · Icari</text></g>`;
+  s+=`<g class="rg" data-hl="r1"><circle cx="${C[0]}" cy="${C[1]}" r="28" fill="rgba(46,107,63,.35)" stroke="#2e6b3f" stroke-width="4"/><text x="${C[0]-40}" y="${C[1]+62}" text-anchor="end" font-family="DM Sans" font-size="22" font-weight="700" fill="#1f4d2c">1 · Chiaraje</text></g>`;
+  S.innerHTML=s;})();
+
+
+
+(function(){const T={r1:['Chiaraje, el piloto','Dos experiencias, al menos cuatro salidas pagadas y un ciclo de reinversión verificado.'],r2:['Icari · 16.000 plantines en su acta 2026','La comunidad vecina, primera opción para sumarse.'],r3:['Subcentral Kumara · 60.000 plantines','Kumara, San Bartolomé y Palca Palca, con vivero propio a 3.900 m.'],r4:['Parque Nacional Tunari','Ya perdió más del 90% de sus kewiñales; su plan de manejo admite turismo comunitario en la zona Z-5.'],r5:['Los Andes de Bolivia','El pájaro kewiñero, especialista de este bosque, está en 7 departamentos del país.']};
+  const box=$('#ringTxt');const set=k=>{if(T[k])box.innerHTML=`<b>${T[k][0]}</b>${T[k][1]}`};
+  $$('#s14 [data-hl]').forEach(el=>{el.addEventListener('pointerover',()=>set(el.dataset.hl));el.addEventListener('click',()=>{lit(el);set(el.dataset.hl)})});})();
+/* ================= comparador ================= */
+(function(){const box=$('#compare'),after=$('.after',box),bar=$('.bar',box),knob=$('.knob',box);let drag=false;
+  const set=p=>{p=Math.max(0,Math.min(100,p));after.style.clipPath='inset(0 0 0 '+p+'%)';bar.style.left=p+'%';knob.style.left=p+'%';knob.setAttribute('aria-valuenow',Math.round(p))};
+  const at=x=>{const r=box.getBoundingClientRect();set((x-r.left)/r.width*100)};
+  box.addEventListener('pointerdown',e=>{e.preventDefault();drag=true;box.setPointerCapture(e.pointerId);at(e.clientX)});
+  box.addEventListener('pointermove',e=>{if(drag)at(e.clientX)});
+  box.addEventListener('pointerup',()=>drag=false);box.addEventListener('pointercancel',()=>drag=false);
+  knob.addEventListener('keydown',e=>{const v=+knob.getAttribute('aria-valuenow');if(e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();set(v-5)}if(e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();set(v+5)}});set(50)})();
+
+
+
+/* ================= navegación: hilo conductor, índice en cascada ================= */
+const scenes=$$('.scene'),NS=scenes.length;let cur=-1,busy=false;const pad=n=>String(n).padStart(2,'0');
+const PH=[['Inicio',''],['Contexto','¿por qué aquí?'],['La propuesta','¿qué haremos?'],['Quiénes','¿con quién?'],['Garantías','¿cómo se asegura?']];
+const ticks=$('#ticks'),dd=$('#dd'),thread=$('#thread'),idxBtn=$('#idxBtn');
+PH.forEach((p,k)=>{if(!k)return;const first=scenes.findIndex(s=>+s.dataset.phase===k);const b=document.createElement('button');b.className=k===2?'core':'';b.dataset.ph=k;
+  b.innerHTML=`<i>${k}</i><span class="lbl">${p[0]}</span>`;b.onclick=()=>go(first);thread.appendChild(b)});
+let html='';PH.forEach((p,k)=>{const sc=scenes.map((s,i)=>[s,i]).filter(x=>+x[0].dataset.phase===k);if(!sc.length)return;
+  html+=`<h5>${k?k+' · ':''}${p[0]}</h5>`+sc.map(x=>`<button role="menuitem" data-i="${x[1]}"><span>${pad(x[1]+1)}</span>${x[0].dataset.title}</button>`).join('')});
+dd.innerHTML=html;$$('button',dd).forEach((b,j)=>{b.style.transitionDelay=(j*22)+'ms';b.onclick=()=>{toggleIdx(false);go(+b.dataset.i)}});
+scenes.forEach((s,i)=>{const b=document.createElement('button');b.innerHTML='<i></i>';b.setAttribute('aria-label',(i+1)+'. '+s.dataset.title);b.onclick=()=>go(i);ticks.appendChild(b);
+  $$('[data-count]',s).forEach(el=>el.textContent=(el.dataset.pre||'')+'0')});
+function toggleIdx(o){o=o==null?!dd.classList.contains('open'):o;dd.classList.toggle('open',o);idxBtn.setAttribute('aria-expanded',o)}
+idxBtn.onclick=e=>{e.stopPropagation();toggleIdx()};
+document.addEventListener('click',e=>{if(dd.classList.contains('open')&&!e.target.closest('#dd'))toggleIdx(false)});
+$('#fsBtn').onclick=async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch(e){}};
+document.addEventListener('fullscreenchange',()=>{$('#fsBtn').textContent=document.fullscreenElement?'Salir de pantalla completa':'Pantalla completa'});
+function countIn(root){$$('[data-count]',root).forEach(el=>{const end=+el.dataset.count,pre=el.dataset.pre||'';if(RM||!G){el.textContent=pre+fmt(end);return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1300),e=1-Math.pow(1-k,3);el.textContent=pre+fmt(end*e);if(k<1)requestAnimationFrame(f)})(t0)})}
+function go(i,instant){i=Math.max(0,Math.min(NS-1,i));if(i===cur||busy)return;
+  closePanel();const prev=scenes[cur],next=scenes[i];cur=i;next.classList.add('on');const inn=$('.inner',next);if(inn)inn.scrollTop=0;
+  [...ticks.children].forEach((b,k)=>b.setAttribute('aria-current',k===i));$$('button',dd).forEach(b=>b.setAttribute('aria-current',+b.dataset.i===i));
+  const ph=+next.dataset.phase;$$('button',thread).forEach(b=>{const k=+b.dataset.ph;b.classList.toggle('now',k===ph);b.classList.toggle('done',k<ph);b.setAttribute('aria-current',k===ph?'step':'false')});
+  $('#wNum').textContent=pad(i+1);$('#wName').textContent=next.dataset.title;
+  if(G&&!instant){busy=true;
+    if(prev)G.to(prev,{opacity:0,duration:.45,ease:'power2.inOut',onComplete:()=>{prev.classList.remove('on');prev.style.opacity=''}});
+    G.fromTo(next,{opacity:0},{opacity:1,duration:.55,ease:'power2.out',onComplete:()=>{busy=false}});
+    const bg=$('.photo img',next)||$('.bgp',next);if(bg)G.fromTo(bg,{scale:1.06},{scale:1,duration:1.8,ease:'power3.out'});
+    G.fromTo($$('.rv',next),{opacity:0,y:18},{opacity:1,y:0,duration:.7,ease:'power3.out',stagger:.05,delay:.1});
+  }else if(prev)prev.classList.remove('on');
+  countIn(next);
+  if(next.id==='s4')tenTrees();
+  if(next.id==='s8')setTimeout(()=>road.intro(),500);
+}
+const step=d=>go(cur+d);
+$('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
+$$('[data-goto]').forEach(b=>b.onclick=()=>go(+b.dataset.goto));
+addEventListener('keydown',e=>{if(e.key==='Escape'){toggleIdx(false);closePanel();return}
+  if(e.target.closest&&e.target.closest('[role="slider"]'))return;
+  if(['ArrowRight','PageDown'].includes(e.key)||(e.key===' '&&!e.target.closest('button'))){e.preventDefault();step(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();step(-1)}else if(e.key==='Home')go(0);else if(e.key==='End')go(NS-1)});
+let tx=null,ty=null;
+addEventListener('touchstart',e=>{if(e.target.closest('#compare,#road,.panel'))return;tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5)step(dx<0?1:-1);tx=null},{passive:true});
+addEventListener('pointermove',e=>{if(RM||!G)return;const sc=scenes[cur];if(!sc)return;const b=$('.bgp',sc);if(!b)return;const mx=e.clientX/innerWidth-.5,my=e.clientY/innerHeight-.5;G.to(b,{x:-mx*14,y:-my*14,duration:1.4,ease:'power2.out',overwrite:'auto'})});
+/* siempre empieza en la portada */
+try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+go(0,true);
+
+})();
+</script>
+</body>
+</html>
